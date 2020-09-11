@@ -1,7 +1,9 @@
 const Theme = {
     colors: {
         dark: '#212121',
-        light: '#E0E0E0'
+        light: '#F5F5F5',
+        gray: '#616161',
+        lightBlue: '#2196F3'
     },
     heights: {
         navigation: {

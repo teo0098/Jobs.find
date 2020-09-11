@@ -8,6 +8,10 @@ export const StyledHamburgerWrapper : StyledComponent<"div", any> = styled.div`
     align-items: center;
     cursor: pointer;
     overflow: hidden;
+
+    ${({ theme }) => theme.media.tablet} {
+        display: none;
+    }
 `
 
 interface StyledHamburgerDashesProps { isHamburgerLaunched : boolean };
