@@ -2,10 +2,11 @@ import { AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
 
 import Logo from './Logo/Logo'
-import { StyledNavigation, StyledMenuContainer, StyledTabletMenu } from './styledNavigation'
+import { StyledNavigation, StyledMenuContainer, StyledTabletMenu, StyledMobileOptions } from './styledNavigation'
 import Hamburger from './Hamburger/Hamburger'
 import Menu from './Menu/Menu'
 import variants from './animationVariants'
+import Favourites from './Favourites/Favourites'
 
 const Navigation : React.FC = () => {
 
@@ -14,16 +15,21 @@ const Navigation : React.FC = () => {
     return (
         <StyledNavigation>
             <Logo/>
-            <Hamburger launchMenu={launchMenu} setLaunchMenu={setLaunchMenu} />
+            <StyledMobileOptions>
+                <Favourites />
+                <Hamburger launchMenu={launchMenu} setLaunchMenu={setLaunchMenu} />
+            </StyledMobileOptions>
             <AnimatePresence>
                 {launchMenu && (
-                    <StyledMenuContainer variants={variants} initial="hidden" animate="visible" exit="hidden">
+                    <StyledMenuContainer id='menu' variants={variants} initial="hidden" animate="visible" exit="hidden">
                         <Menu />
                     </StyledMenuContainer>
                 )}
             </AnimatePresence>
             <StyledTabletMenu>
-                <Menu />
+                <Menu>
+                    <Favourites />
+                </Menu>
             </StyledTabletMenu>
         </StyledNavigation>
     )

@@ -9,6 +9,8 @@
     "cypress": "node_modules\\.bin\\cypress open"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
     "@types/styled-components": "^5.1.3",
     "framer-motion": "^2.6.10",
     "next": "9.5.3",

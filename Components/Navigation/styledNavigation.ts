@@ -10,7 +10,7 @@ export const StyledNavigation : StyledComponent<"header", any> = styled.header`
     justify-content: space-between;
     position: sticky;
     z-index: 1001;
-
+    
     ${({ theme }) => theme.media.tablet} {
         padding: 0 0 0 10px;
         height: ${({ theme }) => theme.heights.navigation.tablet};
@@ -35,5 +35,14 @@ export const StyledTabletMenu : StyledComponent<"div", any> = styled.div`
         display: flex;
         width: 100%;
         height: ${({ theme }) => theme.heights.navigation.tablet};
+    }
+`
+
+export const StyledMobileOptions : StyledComponent<"div", any> = styled.div`
+    display: flex;
+    align-items: center;
+
+    ${({ theme }) => theme.media.tablet} {
+        display: none;
     }
 `

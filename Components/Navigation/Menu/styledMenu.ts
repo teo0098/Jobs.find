@@ -15,12 +15,13 @@ export const StyledNav : StyledComponent<"nav", any> = styled.nav`
 
 interface StyledLinkProps {
     isFirst ?: boolean;
+    noBorder ?: boolean;
 }
 
 export const StyledLink : StyledComponent<"a", any, StyledLinkProps> = styled('a')<StyledLinkProps>`
     text-decoration: none;
     color: ${({ theme }) => theme.colors.light};
-    border-bottom: ${({ theme }) => `0.5px dotted ${theme.colors.gray}`};
+    border-bottom: ${({ theme, noBorder }) => noBorder ? 'none' : `0.5px dotted ${theme.colors.gray}`};
     padding: 20px 10px;
     text-transform: uppercase;
     letter-spacing: 1px;
