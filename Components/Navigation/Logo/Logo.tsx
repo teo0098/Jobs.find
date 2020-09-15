@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import Link from 'next/link'
 
 import StyledLogo from './styledLogo'
@@ -10,4 +11,4 @@ const Logo : React.FC = () => (
     </Link>
 )
 
-export default Logo;
+export default memo(Logo)

@@ -10,6 +10,7 @@ export const StyledNavigation : StyledComponent<"header", any> = styled.header`
     justify-content: space-between;
     position: sticky;
     z-index: 1001;
+    border-bottom: ${({ theme }) => `0.5px solid ${theme.colors.gray}`};
     
     ${({ theme }) => theme.media.tablet} {
         padding: 0 0 0 10px;

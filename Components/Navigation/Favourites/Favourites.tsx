@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import Link from 'next/link'
 
 import FavouriteIcon from '@material-ui/icons/FavoriteBorderOutlined'
@@ -11,4 +12,4 @@ const Favourites : React.FC = () => (
     </Link>
 )
 
-export default Favourites
+export default memo(Favourites)
