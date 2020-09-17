@@ -7,7 +7,7 @@ import { StyledLink } from '../Menu/styledMenu'
 const Favourites : React.FC = () => (
     <Link href='/favourites' passHref>
         <StyledLink noBorder>
-            <FavouriteIcon style={{ marginTop: '5px' }} />
+            <FavouriteIcon style={{ marginTop: '4px' }} />
         </StyledLink>
     </Link>
 )

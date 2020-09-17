@@ -5,7 +5,7 @@ const SearchEngine : React.FC = () => {
     return (
         <StyledSearchEngineContainer>
             <StyledSearchEngine spellCheck='false' placeholder='JavaScript' />
-            <StyledButton>Search for jobs</StyledButton>
+            <StyledButton fontSize='14px' width='30%'>Search for jobs</StyledButton>
         </StyledSearchEngineContainer>
     )
 }

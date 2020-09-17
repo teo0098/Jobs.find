@@ -4,7 +4,7 @@ export const StyledSearchEngineContainer : StyledComponent<"div", any> = styled.
     background-color: ${({ theme }) => theme.colors.dark};
     display: flex;
     justify-content: center;
-    padding: 30px 10px;
+    padding: 30px 20px;
 
     ${({ theme }) => theme.media.tablet} {
         padding: 50px 10px;
@@ -19,24 +19,27 @@ const sharedStyles : FlattenSimpleInterpolation = css`
 
 export const StyledSearchEngine : StyledComponent<"input", any> = styled.input`
     ${sharedStyles}
-    width: 60%;
+    width: 70%;
     padding: 15px 10px;
     color: ${({ theme }) => theme.colors.gray};
-    font-size: 16px;
+    font-size: 15px;
 
     ${({ theme }) => theme.media.tablet} {
         width: 500px;
     }
 `
 
-export const StyledButton : StyledComponent<"button", any> = styled.button`
+interface StyledButtonProps { width : string, offsetTop ?: string, fontSize : string }
+
+export const StyledButton : StyledComponent<"button", any, StyledButtonProps> = styled('button')<StyledButtonProps>`
     ${sharedStyles}
     background-color: ${({ theme }) => theme.colors.lightBlue};
-    width: 30%;
+    width: ${({ width }) => width};
     padding: 10px 5px;
     color: ${({ theme }) => theme.colors.light};
-    font-size: 15px;
+    font-size: ${({ fontSize }) => fontSize};
     cursor: pointer;
+    margin-top: ${({ offsetTop }) => offsetTop};
 
     ${({ theme }) => theme.media.tablet} {
         width: 150px;

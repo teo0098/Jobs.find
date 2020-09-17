@@ -9,7 +9,7 @@ export const StyledNavigation : StyledComponent<"header", any> = styled.header`
     align-items: center;
     justify-content: space-between;
     position: sticky;
-    z-index: 1001;
+    z-index: ${({ theme }) => theme.zIndexes.zi2};
     border-bottom: ${({ theme }) => `0.5px solid ${theme.colors.gray}`};
     
     ${({ theme }) => theme.media.tablet} {
@@ -25,7 +25,7 @@ export const StyledMenuContainer = styled(motion.div)`
     top: ${({ theme }) => theme.heights.navigation.mobile};
     height: ${({ theme }) => `calc(100vh - ${theme.heights.navigation.mobile})`};
     background-color: ${({ theme }) => theme.colors.dark}; 
-    z-index: 1000;
+    z-index: ${({ theme }) => theme.zIndexes.zi1};
     overflow: hidden;
 `
 

@@ -1,16 +1,16 @@
 const variants = {
     hidden: {
-        x: '100%',
+        opacity: 0,
         transition: {
             type: 'tween',
-            duration: 0.3
+            duration: 0.2
         }
     },
     visible: {
-        x: 0,
+        opacity: 1,
         transition: {
             type: 'tween',
-            duration: 0.3
+            duration: 0.2
         }
     }
 }

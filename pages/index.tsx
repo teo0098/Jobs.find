@@ -1,6 +1,7 @@
 import Head from 'next/head'
 
 import SearchEngine from '../Components/SearchEngine/SearchEngine'
+import Filters from '../Components/Filters/Filters'
 
 const Home : React.FC = () => (
   <>
@@ -9,6 +10,7 @@ const Home : React.FC = () => (
       <link rel="icon" href="/favicon.ico" />
     </Head>
     <SearchEngine />
+    <Filters />
   </>
 )
 
