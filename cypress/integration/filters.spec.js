@@ -1,0 +1,16 @@
+describe('Filters Tab Test', () => {
+    it('Animates filters tab after click', () => {
+        cy.visit('/')
+        cy.get('#filters').click()
+        cy.wait(200)
+        cy.get('#categories').should('be.visible')
+        cy.get('#shade').click({ force: true })
+        cy.wait(200)
+        cy.get('#categories').should('not.be.visible')
+        cy.get('#filters').click()
+        cy.wait(200)
+        cy.get('#categories').should('be.visible')
+        cy.get('#x-icon').click()
+        cy.get('#categories').should('not.be.visible')
+    })
+})

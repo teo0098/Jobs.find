@@ -8,7 +8,7 @@ import { StyledFiltersTab,
     StyledReset, 
     StyledOptionsWrapper,
     StyledHeading,
-    StyledCategoriesWrapper } from './styledFilters'
+    StyledCategoriesWrapper, StyledShade } from './styledFilters'
 import variants from './animationVariants'
 import { StyledButton } from '../SearchEngine/styledSearchEngine'
 
@@ -23,22 +23,25 @@ const Filters : React.FC = () => {
 
     return (
         <StyledFiltersTab>
-            <StyledFilter onClick={() => setFilters(true)}>Filters</StyledFilter>
+            <StyledFilter id='filters' onClick={() => setFilters(true)}>Filters</StyledFilter>
             <AnimatePresence>
                 {filters && (
-                    <StyledFiltersContainer variants={variants} initial="hidden" animate="visible" exit="hidden">
-                        <StyledOptionsWrapper>
-                            <StyledReset>Reset</StyledReset>
-                            <CloseIcon style={{ fontSize: '30px' }} onClick={() => setFilters(false)} />
-                        </StyledOptionsWrapper>
-                        <StyledHeading>Popular Technologies</StyledHeading>
-                        <StyledCategoriesWrapper>
-                            {technologies.map(name => (
-                                <StyledFilter margin key={name}> {name} </StyledFilter>
-                            ))}
-                        </StyledCategoriesWrapper>
-                        <StyledButton fontSize='16px' offsetTop='40px' width='100%'>Approve</StyledButton>
-                    </StyledFiltersContainer>
+                    <>
+                        <StyledShade id='shade' onClick={() => setFilters(false)} variants={variants} initial="hidden" animate="visible" exit="hidden" />
+                        <StyledFiltersContainer id='categories' variants={variants} initial="hidden" animate="visible" exit="hidden">
+                            <StyledOptionsWrapper>
+                                <StyledReset>Reset</StyledReset>
+                                <CloseIcon id='x-icon' style={{ fontSize: '25px', cursor: 'pointer' }} onClick={() => setFilters(false)} />
+                            </StyledOptionsWrapper>
+                            <StyledHeading>Popular Technologies</StyledHeading>
+                            <StyledCategoriesWrapper>
+                                {technologies.map(name => (
+                                    <StyledFilter margin key={name}> {name} </StyledFilter>
+                                ))}
+                            </StyledCategoriesWrapper>
+                            <StyledButton fontSize='15px' offsetTop='40px' width='100%'>Approve</StyledButton>
+                        </StyledFiltersContainer>
+                    </>
                     )
                 }
             </AnimatePresence>
