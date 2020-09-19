@@ -9,6 +9,7 @@ export const StyledNavigation : StyledComponent<"header", any> = styled.header`
     align-items: center;
     justify-content: space-between;
     position: sticky;
+    top: 0;
     z-index: ${({ theme }) => theme.zIndexes.zi3};
     border-bottom: ${({ theme }) => `0.5px solid ${theme.colors.gray}`};
     

@@ -1,6 +1,9 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { NextApiRequest, NextApiResponse } from 'next'
+import axios from 'axios'
 
-export default (req, res) => {
-  res.statusCode = 200
-  res.json({ name: 'John Doe' })
+const getJobs = async (req : NextApiRequest, res : NextApiResponse) => {
+  const jobs = await axios.get('https://jobs.github.com/positions.json')
+  res.status(200).json(jobs.data)
 }
+
+export default getJobs
