@@ -1,5 +1,6 @@
 import Head from 'next/head'
-import axios from 'axios'
+import { GetServerSideProps } from 'next'
+import axios, { AxiosResponse } from 'axios'
 
 import SearchEngine from '../Components/SearchEngine/SearchEngine'
 import Filters from '../Components/Filters/Filters'
@@ -12,7 +13,6 @@ const Home : React.FC<HomeProps> = ({ jobs }) => (
   <>
     <Head>
       <title>Jobs.find</title>
-      <link rel="icon" href="/favicon.ico" />
     </Head>
     <SearchEngine />
     <Filters />
@@ -20,11 +20,11 @@ const Home : React.FC<HomeProps> = ({ jobs }) => (
   </>
 )
 
-export async function getServerSideProps() {
+export const getServerSideProps : GetServerSideProps = async () => {
   
   let jobs : Array<Job> | null
   try {
-    const { data } = await axios.get(process.env.GET_JOBS_API)
+    const { data } : AxiosResponse<Array<Job>> = await axios.get(process.env.GET_JOBS_API)
     if (data.length === 0 || !data) throw new Error();
     jobs = data
   }

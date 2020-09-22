@@ -30,10 +30,12 @@ export const StyledFiltersContainer = styled(motion.div)`
     position: fixed;
     top: 0;
     left: 0;
+    bottom: 0;
     z-index: ${({ theme }) => theme.zIndexes.zi4};
     padding: 20px;
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
 
     ${({ theme }) => theme.media.tablet} {
         min-height: auto;
@@ -42,6 +44,8 @@ export const StyledFiltersContainer = styled(motion.div)`
         top: 0;
         left: 100px;
         z-index: ${({ theme }) => theme.zIndexes.zi2};
+        bottom: auto;
+        overflow-y: hidden;
     }
 `
 
