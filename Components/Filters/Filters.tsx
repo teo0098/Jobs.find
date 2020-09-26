@@ -8,7 +8,7 @@ import { StyledFiltersTab,
     StyledReset, 
     StyledOptionsWrapper,
     StyledHeading,
-    StyledCategoriesWrapper, StyledShade } from './styledFilters'
+    StyledCategoriesWrapper, StyledShade } from './styledFilters';
 import variants from './animationVariants'
 import { StyledButton } from '../SearchEngine/styledSearchEngine'
 

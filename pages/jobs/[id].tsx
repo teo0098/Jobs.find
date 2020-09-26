@@ -3,6 +3,7 @@ import Head from 'next/head'
 import axios, { AxiosResponse } from 'axios'
 
 import Job from '../../types/Job'
+import JobPage from '../../Components/JobPage/JobPage'
 
 interface JobProps { job : Job | null }
 
@@ -13,16 +14,14 @@ const JobId : React.FC<JobProps> = ({ job }) => {
             <Head>
                 <title> {job ? job.title : 'Ups...'} </title>
             </Head>
-            <div>
-                {job.title}
-            </div>
+            <JobPage job={job} />
         </>
     )
 }
 
 export const getStaticPaths : GetStaticPaths = async () => {
 
-    const { data: jobs } : AxiosResponse<Array<Job>> = await axios.get(process.env.GET_JOBS_API)
+    const { data: jobs } : AxiosResponse<Array<Job>> = await axios.get(`${process.env.GET_JOBS_API}`)
     const paths = jobs.map((job : Job) => ({
         params: { id: job.id }
     }))
@@ -30,11 +29,12 @@ export const getStaticPaths : GetStaticPaths = async () => {
     return { paths, fallback: true }
 }
 
-export const getStaticProps : GetStaticProps = async ({ params: { id } }) => {
+export const getStaticProps : GetStaticProps = async ({ params }) => {
     
     let job : Job | null
     try {
-        const { data } : AxiosResponse<Job> = await axios.get(`${process.env.GET_JOB_API}/${id}.json`)
+        if (!params) throw new Error()
+        const { data } : AxiosResponse<Job> = await axios.get(`${process.env.GET_JOB_API}/${params.id}.json`)
         if (Object.keys(data).length < 11 || !data) throw new Error()        
         job = data
     }

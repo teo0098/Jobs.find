@@ -5,7 +5,6 @@ export const StyledImg : StyledComponent<"img", any> = styled.img`
     width: 70px;
     height: 70px;
     margin-right: 10px;
-    color: ${({ theme }) => theme.colors.dark};
 
     ${({ theme }) => theme.media.desktop} {
         margin-right: 30px;
@@ -22,6 +21,7 @@ export const StyledP : StyledComponent<"p", any, StyledPProps> = styled('p')<Sty
     color: ${({ theme }) => theme.colors.lightGray};
     font-size: 12px;
     font-weight: bold;
+    margin-top: 3px;
 
     ::before {
         ${({ company }) => company && `content: 'at'`};
@@ -74,6 +74,8 @@ export const StyledDiv : StyledComponent<"div", any> = styled.div`
 `
 
 export const StyledH4 : StyledComponent<"h4", any> = styled.h4`
+    color: ${({ theme }) => theme.colors.dark};
+
     ${({ theme }) => theme.media.tablet} {
         width: 300px;
         margin-right: 10px;

@@ -6,11 +6,13 @@ import GlobalStyles from '../styles/global'
 import Layout from '../Components/Layout/Layout';
 import Theme from '../styles/theme'
 
-const App = ({ Component, pageProps }) => {
+type AppType = ({ Component, pageProps }: { Component: any, pageProps: any}) => JSX.Element
+
+const App : AppType = ({ Component, pageProps }) => {
 
   useEffect(() => {
     const jssStyles = document.querySelector('#jss-server-side');
-    if (jssStyles) jssStyles.parentElement.removeChild(jssStyles);
+    if (jssStyles) jssStyles.parentElement?.removeChild(jssStyles);
   }, []);
 
   return (

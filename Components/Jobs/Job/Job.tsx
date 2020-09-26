@@ -7,7 +7,7 @@ const Job : React.FC<JobProps> = ({ title, id, company_logo, company, location, 
     <Link href={`/jobs/${encodeURIComponent(id)}`} passHref>
         <StyledLink index={index}>
             <StyledMainSection>
-                <StyledImg src={`${company_logo}`} alt="Company logo" />
+                <StyledImg src={`${company_logo ? company_logo : ''}`} alt="Company logo" />
                 <StyledSection>
                     <StyledH4> {title} </StyledH4>
                     <StyledDiv>
