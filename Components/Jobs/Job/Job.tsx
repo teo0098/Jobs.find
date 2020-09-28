@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { memo } from 'react'
 
 import JobProps from './jobProps'
 import { StyledImg, StyledMainSection, StyledP, StyledLink, StyledSection, StyledDiv, StyledH4 } from './styledJob'
@@ -21,4 +22,4 @@ const Job : React.FC<JobProps> = ({ title, id, company_logo, company, location, 
     </Link>
 )
 
-export default Job
+export default memo(Job)

@@ -2,67 +2,26 @@ import { useReducer } from 'react';
 import axios, { AxiosResponse } from 'axios'
 
 import JobType from '../../types/Job'
+import { reducer, initialState, StateType } from '../../useReducers/moreJobsReducer/moreJobsReducer'
+import MoreJobsActions from '../../useReducers/moreJobsReducer/actionTypes'
 
-const initialState = (jobs : Array<JobType> | null) => ({
-    page: 0,
-    offers: jobs ? [...jobs] : [],
-    error: '',
-    loading: true
-})
-
-type State = {
-    page: number,
-    offers: Array<JobType>,
-    error: string,
-    loading: boolean
-}
-
-type Action = {
-    type: string,
-    newOffers: Array<JobType>
-}
-
-const reducer = (state : State, action : Action) => {
-    switch (action.type) {
-        case 'MORE_JOBS':
-            return {
-                ...state,
-                error: '',
-                page: state.page + 1,
-                loading: true      
-            }
-        case 'GOT_JOBS':
-            return {
-                ...state,
-                loading: false,
-                error: '',
-                offers: [...state.offers, ...action.newOffers]
-            }
-        case 'ERROR':
-            return {
-                ...state,
-                loading: false,
-                error: 'Unable to retrieve more plants... Please attempt again soon.'
-            }
-        default:
-            return state
-    }
-}
-
-type Function = (jobs : Array<JobType> | null) => { getMoreJobs : () => Promise<void>, state : State };
+type Function = (jobs : Array<JobType> | null) => { getMoreJobs : () => Promise<void>, state : StateType };
 
 const useMoreJobs : Function = (jobs) => {
 
     const [state, dispatch] = useReducer(reducer, initialState(jobs))
     
     const getMoreJobs = async () => {
-        dispatch({ type: 'MORE_JOBS', newOffers: [] })
+        window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight)
+        dispatch({ type: MoreJobsActions.MORE_JOBS, newOffers: [] })
         try {
-            const { data } : AxiosResponse<Array<JobType>> = await axios.get(`${process.env.GET_JOBS_API}?page=${state.page}`)
-            dispatch({ type: 'GOT_JOBS', newOffers: data })
+            const { data: jobs, status } : AxiosResponse<Array<JobType>> = await axios.get(`/api/jobs?page=${state.page}`)
+            if (status !== 200) throw new Error()
+            dispatch({ type: MoreJobsActions.GOT_JOBS, newOffers: jobs })
         }
         catch {
-            dispatch({ type: 'ERROR', newOffers: [] })
+            window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight)
+            dispatch({ type: MoreJobsActions.ERROR, newOffers: [] })
         }
     }
 

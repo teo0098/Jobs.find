@@ -28,8 +28,16 @@ export const StyledLoader : StyledComponent<"div", any> = styled.div`
     margin-top: 20px;
     display: flex;
     justify-content: center;
+`
 
-    & * {
-        color: ${({ theme }) => theme.colors.dark};
+export const StyledMoreError : StyledComponent<"div", any> = styled.div`
+    width: 90%;
+    margin: 20px auto 0 auto;
+
+    ${({ theme }) => theme.media.tablet} {
+        width: auto;
+        display: flex;
+        justify-content: center;
+        padding: 0 20px;
     }
 `
