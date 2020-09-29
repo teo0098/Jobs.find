@@ -25,7 +25,7 @@ const Jobs : React.FC<JobsProps> = ({ jobs }) => {
                         </Modal> : null}
                     {loading ? <StyledLoader><Loader /></StyledLoader> : null}
                     {offersQuantity >= 50 ?
-                        <StyledMoreButton disabled={loading ? true : false} onClick={getMoreJobs} width='90%' fontSize='14px'>More jobs</StyledMoreButton>
+                        <StyledMoreButton id='moreJobsBtn' disabled={loading ? true : false} onClick={getMoreJobs} width='90%' fontSize='14px'>More jobs</StyledMoreButton>
                         : null
                     }
                 </>

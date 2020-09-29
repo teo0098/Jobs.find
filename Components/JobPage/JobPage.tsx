@@ -5,8 +5,15 @@ import JobPageProps from './jobPageProps'
 import { StyledInfo, StyledImg, StyledDesc, StyledP, StyledSpan, StyledA, StyledApplyContainer, StyledFavBtn, 
     StyledDiv, StyledStickyApply, StyledError } from './styledJobPage';
 import Error from '../Error/Error'
+import Loader from '../Loader/Loader'
 
-const JobPage : React.FC<JobPageProps> = ({ job }) => {
+const JobPage : React.FC<JobPageProps> = ({ job, isFallback }) => {
+
+    if (isFallback) return (
+        <div style={{ margin: '20px' }}>
+            <Loader />
+        </div>
+    )
 
     return (
         job ?
@@ -15,7 +22,7 @@ const JobPage : React.FC<JobPageProps> = ({ job }) => {
                     <StyledInfo resp>
                         <StyledImg src={`${job.company_logo ? job.company_logo : ''}`} alt='Company logo' />
                         <section>
-                            <h2> {job.title} </h2>
+                            <h2 id='jobTitle'> {job.title} </h2>
                             <StyledP> Company: <StyledA rel="noopener nofollow" target="_blank" href={`${job.company_url}`}> {job.company} </StyledA></StyledP>
                             <StyledP> Type: <StyledSpan>{job.type}</StyledSpan></StyledP>
                             <StyledP> Location: <StyledSpan>{job.location}</StyledSpan></StyledP>

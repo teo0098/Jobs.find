@@ -4,7 +4,7 @@ import { memo } from 'react';
 import { StyledLoader } from './styledLoader'
 
 const Loader : React.FC = () => (
-    <StyledLoader>
+    <StyledLoader id='loader'>
         <CircularProgress />
     </StyledLoader>
 )

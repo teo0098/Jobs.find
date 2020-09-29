@@ -1,5 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
 import Head from 'next/head'
+import { NextRouter, useRouter } from 'next/router'
 import axios, { AxiosResponse } from 'axios'
 
 import Job from '../../types/Job'
@@ -9,12 +10,18 @@ interface JobProps { job : Job | null }
 
 const JobId : React.FC<JobProps> = ({ job }) => {
 
+    const { isFallback } : NextRouter = useRouter()
+
     return (
         <>
             <Head>
-                <title> {job ? job.title : 'Ups...'} </title>
+                <title>
+                    {isFallback ? 'Loading...' : ''}
+                    {job ? job.title : ''}
+                    {!job && !isFallback ? 'Ups...' : ''}
+                </title>
             </Head>
-            <JobPage job={job} />
+            <JobPage isFallback={isFallback} job={job} />
         </>
     )
 }
