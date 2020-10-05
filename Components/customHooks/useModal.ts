@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 
-const useModal = () => {
+type Function = () => boolean
+
+const useModal : Function = () => {
 
     const [show, setShow] = useState<boolean>(true)
 

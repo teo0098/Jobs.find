@@ -41,8 +41,8 @@ export const getStaticProps : GetStaticProps = async ({ params }) => {
     let job : Job | null
     try {
         if (!params) throw new Error()
-        const { data } : AxiosResponse<Job> = await axios.get(`${process.env.GET_JOB_API}/${params.id}.json`)
-        if (Object.keys(data).length < 11 || !data) throw new Error()        
+        const { data, status } : AxiosResponse<Job> = await axios.get(`${process.env.GET_JOB_API}/${params.id}.json`)
+        if (Object.keys(data).length < 11 || !data || status !== 200) throw new Error()        
         job = data
     }
     catch {

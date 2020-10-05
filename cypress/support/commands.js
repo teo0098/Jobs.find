@@ -24,6 +24,15 @@ Cypress.Commands.add('checkJobPage', (index, position, body) => {
     })
 })
 
+Cypress.Commands.add('requestSeekJobs', filter => {
+    cy.get('#loader').should('be.visible')
+    cy.request('GET', `${Cypress.env('GET_JOBS_API')}?search=${filter}`).then(({ status, body }) => {
+        cy.get('#loader').should('not.be.visible')
+        expect(status).to.eq(200)
+        expect(body).to.be.an('array')
+    })
+})
+
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite

@@ -2,13 +2,13 @@ import JobsProps from './jobsProps'
 import Job from './Job/Job'
 import { StyledError, StyledJobs, StyledMoreButton, StyledLoader, StyledMoreError } from './styledJobs'
 import Error from '../Error/Error'
-import useMoreJobs from '../customHooks/useMoreJobs'
+import useJobs from '../customHooks/useJobs'
 import Loader from '../Loader/Loader'
 import Modal from '../Modal/Modal'
 
 const Jobs : React.FC<JobsProps> = ({ jobs }) => {
 
-    const { getMoreJobs, state: { error, loading, offers, offersQuantity } } = useMoreJobs(jobs)
+    const { getMoreJobs, state: { error, loading, offers, offersQuantity } } = useJobs(jobs)
 
     return (
         <StyledJobs id='jobs'>

@@ -51,17 +51,18 @@ export const StyledFiltersContainer = styled(motion.div)`
 
 const sharedStyles = css`
     letter-spacing: 1px;
-    color: ${({ theme }) => theme.colors.lightGray};
     font-size: 13px;
     cursor: pointer;
+    user-select: none;
 `
 
-interface StyledFilterProps { margin ?: boolean }
+interface StyledFilterProps { margin ?: boolean, checked ?: boolean }
 
 export const StyledFilter : StyledComponent<"section", any, StyledFilterProps> = styled('section')<StyledFilterProps>`
-    border: ${({ theme }) => `2px solid ${theme.colors.lightGray}`};
+    border: ${({ theme, checked }) => checked ? `2px solid ${theme.colors.dark}` : `2px solid ${theme.colors.lightGray}`};
     padding: 5px 10px;
     margin: ${({ margin }) => margin ? `10px 10px 0 0` : 'none'};
+    color: ${({ theme, checked }) => checked ? theme.colors.dark : theme.colors.lightGray};
     ${sharedStyles}
 
     :hover {
@@ -71,6 +72,7 @@ export const StyledFilter : StyledComponent<"section", any, StyledFilterProps> =
 `
 
 export const StyledReset : StyledComponent<"span", any> = styled.span`
+    color: ${({ theme }) => theme.colors.lightGray};
     ${sharedStyles}
 
     :hover {

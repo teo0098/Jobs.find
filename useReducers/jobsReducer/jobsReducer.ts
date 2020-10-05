@@ -1,8 +1,8 @@
 import JobType from '../../types/Job'
-import MoreJobsActions from './actionTypes'
+import JobsActions from './actionTypes'
 
 export const initialState = (jobs : Array<JobType> | null) => ({
-    page: 2,
+    page: 0,
     offers: jobs ? [...jobs] : [],
     error: '',
     loading: false,
@@ -19,19 +19,20 @@ export type StateType = {
 
 type ActionType = {
     type: string,
-    newOffers: Array<JobType>
+    newOffers: Array<JobType>,
+    errorMSG: string
 }
 
 export const reducer = (state : StateType, action : ActionType) => {
     switch (action.type) {
-        case MoreJobsActions.MORE_JOBS:
+        case JobsActions.MORE_JOBS:
             return {
                 ...state,
                 error: '',
                 page: state.page + 1,
                 loading: true      
             }
-        case MoreJobsActions.GOT_JOBS:
+        case JobsActions.GOT_JOBS:
             return {
                 ...state,
                 loading: false,
@@ -39,11 +40,20 @@ export const reducer = (state : StateType, action : ActionType) => {
                 offers: [...state.offers, ...action.newOffers],
                 offersQuantity: action.newOffers.length
             }
-        case MoreJobsActions.ERROR:
+        case JobsActions.REPLACE_JOBS:
+            return {
+                ...state,
+                loading: true,
+                error: '',
+                page: 0,
+                offers: [],
+                offersQuantity: 0
+            }
+        case JobsActions.ERROR:
             return {
                 ...state,
                 loading: false,
-                error: 'Unable to retrieve more jobs... Please attempt again soon.'
+                error: action.errorMSG
             }
         default:
             return state
