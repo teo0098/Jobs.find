@@ -52,4 +52,4 @@ export const getStaticProps : GetStaticProps = async ({ params }) => {
     return { props: { job } }
 }
 
-export default JobId;
+export default JobId

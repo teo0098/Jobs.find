@@ -1,6 +1,8 @@
+import SearchIcon from '@material-ui/icons/Search';
+
 import JobsProps from './jobsProps'
 import Job from './Job/Job'
-import { StyledError, StyledJobs, StyledMoreButton, StyledLoader, StyledMoreError } from './styledJobs'
+import { StyledError, StyledJobs, StyledMoreButton, StyledLoader, StyledMoreError, StyledNoResults, StyledP } from './styledJobs'
 import Error from '../Error/Error'
 import useJobs from '../customHooks/useJobs'
 import Loader from '../Loader/Loader'
@@ -8,7 +10,14 @@ import Modal from '../Modal/Modal'
 
 const Jobs : React.FC<JobsProps> = ({ jobs }) => {
 
-    const { getMoreJobs, state: { error, loading, offers, offersQuantity } } = useJobs(jobs)
+    const { getMoreJobs, state: { error, loading, offers, offersQuantity }, query } = useJobs(jobs)
+
+    if (query.search && !loading && !error && offersQuantity < 1) return (
+        <StyledNoResults>
+            <SearchIcon style={{ fontSize: '30px' }} />
+            <StyledP>No matched results were found...</StyledP>
+        </StyledNoResults>
+    )
 
     return (
         <StyledJobs id='jobs'>
@@ -24,7 +33,7 @@ const Jobs : React.FC<JobsProps> = ({ jobs }) => {
                             </StyledMoreError>
                         </Modal> : null}
                     {loading ? <StyledLoader><Loader /></StyledLoader> : null}
-                    {offersQuantity >= 50 ?
+                    {offersQuantity >= 50 && !loading && !error ?
                         <StyledMoreButton id='moreJobsBtn' disabled={loading ? true : false} onClick={getMoreJobs} width='90%' fontSize='14px'>More jobs</StyledMoreButton>
                         : null
                     }

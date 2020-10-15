@@ -2,8 +2,7 @@ import htmlParser from 'html-react-parser'
 import FavouriteIcon from '@material-ui/icons/FavoriteBorderOutlined'
 
 import JobPageProps from './jobPageProps'
-import { StyledInfo, StyledImg, StyledDesc, StyledP, StyledSpan, StyledA, StyledApplyContainer, StyledFavBtn, 
-    StyledDiv, StyledStickyApply, StyledError } from './styledJobPage';
+import * as SC from './styledJobPage';
 import Error from '../Error/Error'
 import Loader from '../Loader/Loader'
 
@@ -17,40 +16,40 @@ const JobPage : React.FC<JobPageProps> = ({ job, isFallback }) => {
 
     return (
         job ?
-            <StyledDiv id='jobPage'>
+            <SC.StyledDiv id='jobPage'>
                 <div>
-                    <StyledInfo resp>
-                        <StyledImg src={`${job.company_logo ? job.company_logo : ''}`} alt='Company logo' />
+                    <SC.StyledInfo resp>
+                        <SC.StyledImg src={`${job.company_logo ? job.company_logo : ''}`} alt='Company logo' />
                         <section>
                             <h2 id='jobTitle'> {job.title} </h2>
-                            <StyledP> Company: <StyledA rel="noopener nofollow" target="_blank" href={`${job.company_url}`}> {job.company} </StyledA></StyledP>
-                            <StyledP> Type: <StyledSpan>{job.type}</StyledSpan></StyledP>
-                            <StyledP> Location: <StyledSpan>{job.location}</StyledSpan></StyledP>
-                            <StyledP> Posted: <StyledSpan>{job.created_at}</StyledSpan></StyledP>
+                            <SC.StyledP> Company: <SC.StyledA rel="noopener nofollow" target="_blank" href={`${job.company_url}`}> {job.company} </SC.StyledA></SC.StyledP>
+                            <SC.StyledP> Type: <SC.StyledSpan>{job.type}</SC.StyledSpan></SC.StyledP>
+                            <SC.StyledP> Location: <SC.StyledSpan>{job.location}</SC.StyledSpan></SC.StyledP>
+                            <SC.StyledP> Posted: <SC.StyledSpan>{job.created_at}</SC.StyledSpan></SC.StyledP>
                         </section>
-                    </StyledInfo>
-                    <StyledInfo borderLeft>
-                        <StyledP desc>Description</StyledP>
-                        <StyledDesc> {htmlParser(job.description)} </StyledDesc>
-                    </StyledInfo>
+                    </SC.StyledInfo>
+                    <SC.StyledInfo borderLeft>
+                        <SC.StyledP desc>Description</SC.StyledP>
+                        <SC.StyledDesc> {htmlParser(job.description)} </SC.StyledDesc>
+                    </SC.StyledInfo>
                 </div>
-                <StyledStickyApply>
-                    <StyledInfo>
-                        <StyledP desc>How to apply?</StyledP>
-                        <StyledApplyContainer>
+                <SC.StyledStickyApply>
+                    <SC.StyledInfo>
+                        <SC.StyledP desc>How to apply?</SC.StyledP>
+                        <SC.StyledApplyContainer>
                             {htmlParser(job.how_to_apply)}
-                        </StyledApplyContainer>
-                    </StyledInfo>
-                    <StyledInfo>
-                        <StyledP desc>Has that job suited you?</StyledP>
-                        <StyledFavBtn width="100%" fontSize="16px">Add to <FavouriteIcon style={{ marginLeft: '5px' }} /></StyledFavBtn>
-                    </StyledInfo>
-                </StyledStickyApply>
-            </StyledDiv>
+                        </SC.StyledApplyContainer>
+                    </SC.StyledInfo>
+                    <SC.StyledInfo>
+                        <SC.StyledP desc>Has that job suited you?</SC.StyledP>
+                        <SC.StyledFavBtn width="100%" fontSize="16px">Add to <FavouriteIcon style={{ marginLeft: '5px' }} /></SC.StyledFavBtn>
+                    </SC.StyledInfo>
+                </SC.StyledStickyApply>
+            </SC.StyledDiv>
         :
-            <StyledError>
-                <Error> Unable to present job for you... Please attempt again soon. </Error>
-            </StyledError>
+            <SC.StyledError>
+                <Error> Unable to present job for you (it may indicate that this job no longer exists)... Please attempt again soon. </Error>
+            </SC.StyledError>
     )
 }
 

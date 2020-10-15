@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { GetServerSideProps } from 'next'
+import { GetStaticProps } from 'next'
 import axios, { AxiosResponse } from 'axios'
 
 import SearchEngine from '../Components/SearchEngine/SearchEngine'
@@ -20,7 +20,7 @@ const Home : React.FC<HomeProps> = ({ jobs }) => (
   </>
 )
 
-export const getServerSideProps : GetServerSideProps = async () => {
+export const getStaticProps : GetStaticProps = async () => {
   
   let jobs : Array<Job> | null
   try {
@@ -32,7 +32,7 @@ export const getServerSideProps : GetServerSideProps = async () => {
     jobs = null;
   }
 
-  return { props: { jobs } }
+  return { props: { jobs }, revalidate: 3600 }
 }
 
 export default Home

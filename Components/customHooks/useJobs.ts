@@ -1,12 +1,13 @@
 import { useEffect, useReducer } from 'react';
 import axios, { AxiosResponse } from 'axios'
 import { useRouter, NextRouter } from 'next/router'
+import { ParsedUrlQuery } from 'querystring'
 
 import JobType from '../../types/Job'
 import { reducer, initialState, StateType } from '../../useReducers/jobsReducer/jobsReducer'
 import JobsActions from '../../useReducers/jobsReducer/actionTypes'
 
-type Function = (jobs : Array<JobType> | null) => { getMoreJobs : () => Promise<void>, state : StateType };
+type Function = (jobs : Array<JobType> | null) => { getMoreJobs : () => Promise<void>, state : StateType, query : ParsedUrlQuery};
 
 const useJobs : Function = (jobs) => {
 
@@ -44,7 +45,7 @@ const useJobs : Function = (jobs) => {
         }
     }
 
-    return { getMoreJobs, state }
+    return { getMoreJobs, state, query }
 }
 
 export default useJobs

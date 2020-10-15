@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 export const StyledFiltersTab : StyledComponent<"div", any> = styled.div`
     padding: 20px;
     display: flex;
+    align-items: center;
     border-bottom: ${({ theme }) => `0.5px solid ${theme.colors.lightGray}`};
     color: ${({ theme }) => theme.colors.dark};
     position: relative;
@@ -71,9 +72,12 @@ export const StyledFilter : StyledComponent<"section", any, StyledFilterProps> =
     }
 `
 
-export const StyledReset : StyledComponent<"span", any> = styled.span`
+interface StyledResetProps { isGap ?: boolean }
+
+export const StyledReset : StyledComponent<"span", any, StyledResetProps> = styled.span<StyledResetProps>`
     color: ${({ theme }) => theme.colors.lightGray};
     ${sharedStyles}
+    margin-left: ${({ isGap }) => isGap ? '10px' : 'none'};
 
     :hover {
         color: ${({ theme }) => theme.colors.dark};

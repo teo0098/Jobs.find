@@ -41,3 +41,14 @@ export const StyledMoreError : StyledComponent<"div", any> = styled.div`
         padding: 0 20px;
     }
 `
+
+export const StyledNoResults : StyledComponent<"section", any> = styled.section`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 5px;
+`
+
+export const StyledP : StyledComponent<"p", any> = styled.p`
+    color: ${({ theme }) => theme.colors.dark};
+`
