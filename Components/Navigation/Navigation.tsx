@@ -10,19 +10,21 @@ import Favourites from './Favourites/Favourites'
 
 const Navigation : React.FC = () => {
 
-    const [launchMenu, setLaunchMenu] = useState<boolean>(false);
+    const [launchMenu, setLaunchMenu] = useState<boolean>(false)
+
+    const handleOnClick = () => launchMenu && setLaunchMenu ? setLaunchMenu(false) : null
 
     return (
         <StyledNavigation>
-            <Logo/>
+            <Logo turnOfNav={handleOnClick} />
             <StyledMobileOptions>
-                <Favourites />
+                <Favourites turnOfNav={handleOnClick} />
                 <Hamburger launchMenu={launchMenu} setLaunchMenu={setLaunchMenu} />
             </StyledMobileOptions>
             <AnimatePresence>
                 {launchMenu && (
                     <StyledMenuContainer id='menu' variants={variants} initial="hidden" animate="visible" exit="hidden">
-                        <Menu />
+                        <Menu turnOfNav={handleOnClick} />
                     </StyledMenuContainer>
                 )}
             </AnimatePresence>
