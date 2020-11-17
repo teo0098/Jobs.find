@@ -1,7 +1,8 @@
 import TextField from '@material-ui/core/TextField'
 import { Field } from 'react-final-form'
 
-import InputsError from '../InputsError/InputsError'
+import Info from '../../Info/Info'
+import InfoTypes from '../../Info/InfoTypes'
 
 const validateName = (name : string) => {
     if (!name) return 'Field is required';
@@ -16,7 +17,7 @@ const Name : React.FC = () => (
         {({ input, meta }) =>
             <div>
                 <TextField style={{ width: '100%' }} {...input} label="Name" variant="filled" />
-                {meta.error && meta.touched && <InputsError> {meta.error} </InputsError>}
+                {meta.error && meta.touched && <Info state={InfoTypes.ERROR}> {meta.error} </Info>}
             </div>
         }
     </Field>

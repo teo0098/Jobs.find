@@ -33,28 +33,19 @@ Cypress.Commands.add('requestSeekJobs', filter => {
     })
 })
 
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add("login", (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+Cypress.Commands.add('registerUser', code => {
+    cy.get('input[name=email]').type("teo@wp.pl")
+    cy.get('button[type="submit"]').click()
+    cy.request('POST', '/api/account', {
+        name: 'Jan',
+        surname: 'Kowalski',
+        email: 'teo@wp.pl',
+        password: '12345678',
+        rpassword: '12345678',
+        adult: true
+    }).then(({ body, status }) => {
+        cy.get('#loader').should('not.be.visible')
+        expect(status).to.eq(code)
+        expect(body).to.be.a('string')
+    })
+})

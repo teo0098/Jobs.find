@@ -2,9 +2,10 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { memo } from 'react';
 
 import { StyledLoader } from './styledLoader'
+import LoaderProps from './loaderProps'
 
-const Loader : React.FC = () => (
-    <StyledLoader id='loader'>
+const Loader : React.FC<LoaderProps> = ({ light }) => (
+    <StyledLoader light={light} id='loader'>
         <CircularProgress />
     </StyledLoader>
 )

@@ -7,7 +7,9 @@ const Theme = {
         lightGray: '#9E9E9E',
         lightBlue: '#2196F3',
         error: '#F50057',
-        lightError: '#ffcdd2'
+        lightError: '#ffcdd2',
+        success: '#2E7D32',
+        lightSuccess: '#B9F6CA'
     },
     heights: {
         navigation: {

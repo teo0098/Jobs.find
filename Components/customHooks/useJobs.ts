@@ -1,5 +1,5 @@
 import { useEffect, useReducer } from 'react';
-import axios, { AxiosResponse } from 'axios'
+import axios from 'axios'
 import { useRouter, NextRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
 
@@ -20,7 +20,7 @@ const useJobs : Function = (jobs) => {
                 dispatch({ type: JobsActions.REPLACE_JOBS, newOffers: [], errorMSG: '' })
                 try {
                     const { data: seekJobs, status } = await axios.get(`/api/jobs?page=${state.page}&search=${query.search ? query.search : ''}`)
-                    if (!seekJobs || status !== 200) throw new Error()
+                    if (!seekJobs || status !== 200 || seekJobs === JobsActions.ERROR) throw new Error()
                     dispatch({ type: JobsActions.GOT_JOBS, newOffers: seekJobs, errorMSG: '' })
                 }
                 catch {
@@ -35,8 +35,8 @@ const useJobs : Function = (jobs) => {
         window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight)
         dispatch({ type: JobsActions.MORE_JOBS, newOffers: [], errorMSG: '' })
         try {
-            const { data: jobs, status } : AxiosResponse<Array<JobType>> = await axios.get(`/api/jobs?page=${state.page + 2}&search=${query.search ? query.search : ''}`)
-            if (status !== 200 || !jobs) throw new Error()
+            const { data: jobs, status } = await axios.get(`/api/jobs?page=${state.page + 2}&search=${query.search ? query.search : ''}`)
+            if (status !== 200 || !jobs || jobs === JobsActions.ERROR) throw new Error()
             dispatch({ type: JobsActions.GOT_JOBS, newOffers: jobs, errorMSG: '' })
         }
         catch {

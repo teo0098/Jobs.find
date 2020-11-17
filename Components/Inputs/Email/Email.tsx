@@ -2,7 +2,8 @@ import TextField from '@material-ui/core/TextField'
 import { Field } from 'react-final-form'
 import validator from 'validator'
 
-import InputsError from '../InputsError/InputsError'
+import Info from '../../Info/Info'
+import InfoTypes from '../../Info/InfoTypes'
 
 export const validateEmail = (email : string) => {
     if (!email) return 'Field is required'
@@ -13,9 +14,9 @@ export const validateEmail = (email : string) => {
 const Email : React.FC = () => (
     <Field name='email' component='input' validate={validateEmail}>
         {({ input, meta }) =>
-            <div>
+            <div id='emailField'>
                 <TextField style={{ width: '100%' }} {...input} label="Email" variant="filled" />
-                {meta.error && meta.touched && <InputsError> {meta.error} </InputsError>}
+                {meta.error && meta.touched && <Info state={InfoTypes.ERROR}> {meta.error} </Info>}
             </div>
         }
     </Field>

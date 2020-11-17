@@ -1,7 +1,8 @@
 import TextField from '@material-ui/core/TextField'
 import { Field } from 'react-final-form'
 
-import InputsError from '../InputsError/InputsError'
+import Info from '../../Info/Info'
+import InfoTypes from '../../Info/InfoTypes'
 
 const validatePassword = (password : string) => {
     if (!password) return 'Field is required'
@@ -15,7 +16,7 @@ const Password : React.FC = () => (
         {({ input, meta }) =>
             <div>
                 <TextField color='primary' type='password' style={{ width: '100%' }} {...input} label="Password" variant="filled" />
-                {meta.error && meta.touched && <InputsError> {meta.error} </InputsError>}
+                {meta.error && meta.touched && <Info state={InfoTypes.ERROR}> {meta.error} </Info>}
             </div>
         }
     </Field>
