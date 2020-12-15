@@ -1,6 +1,6 @@
-import axios from 'axios'
 import { useReducer } from 'react'
 
+import axios from '../../axiosInstance'
 import { reducer, initialState, StateType } from '../../useReducers/registerReducer/registerReducer'
 import RegisterActions from '../../useReducers/registerReducer/actionTypes'
 
@@ -14,8 +14,8 @@ const useSignup : Function = () => {
         dispatch({ type: RegisterActions.LOADING, errorMsg: '' })
         try {
             const { data, status } = await axios.post('/api/account', values)
-            if (!data || status != 201 || data === RegisterActions.ERROR) throw new Error()
-            if (data === RegisterActions.EMAIL_EXISTS) return dispatch({ type: RegisterActions.ERROR, errorMsg: RegisterActions.EMAIL_IN_USE })
+            if (!data || status === 500 || data === RegisterActions.ERROR) throw new Error()
+            if (data === RegisterActions.EMAIL_EXISTS || status === 409) return dispatch({ type: RegisterActions.ERROR, errorMsg: RegisterActions.EMAIL_IN_USE })
             dispatch({ type: RegisterActions.SUCCESS, errorMsg: '' })
         }
         catch {

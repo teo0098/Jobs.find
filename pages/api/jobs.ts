@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import axios from 'axios'
 
+import JobsActions from '../../useReducers/jobsReducer/actionTypes'
+
 const getMoreJobs = async (req : NextApiRequest, res : NextApiResponse) => {
   try {
     const page = req.query.page ? req.query.page : 1
@@ -9,7 +11,7 @@ const getMoreJobs = async (req : NextApiRequest, res : NextApiResponse) => {
     res.status(200).json(newJobs)
   }
   catch {
-    res.status(404).json('ERROR')
+    res.status(500).json(JobsActions.ERROR)
   }
 }
 

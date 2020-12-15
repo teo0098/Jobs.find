@@ -1,8 +1,8 @@
 import { useEffect, useReducer } from 'react';
-import axios from 'axios'
 import { useRouter, NextRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
 
+import axios from '../../axiosInstance'
 import JobType from '../../types/Job'
 import { reducer, initialState, StateType } from '../../useReducers/jobsReducer/jobsReducer'
 import JobsActions from '../../useReducers/jobsReducer/actionTypes'

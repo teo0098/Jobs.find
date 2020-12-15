@@ -19,6 +19,6 @@ describe('Register user in a service', () => {
     })
 
     it('User exists', () => {
-        cy.registerUser(500)
+        cy.registerUser(409)
     })
 })

@@ -34,12 +34,12 @@ Cypress.Commands.add('requestSeekJobs', filter => {
 })
 
 Cypress.Commands.add('registerUser', code => {
-    cy.get('input[name=email]').type("teo@wp.pl")
+    cy.get('input[name=email]').type("something@wp.pl")
     cy.get('button[type="submit"]').click()
     cy.request('POST', '/api/account', {
         name: 'Jan',
         surname: 'Kowalski',
-        email: 'teo@wp.pl',
+        email: 'something@wp.pl',
         password: '12345678',
         rpassword: '12345678',
         adult: true

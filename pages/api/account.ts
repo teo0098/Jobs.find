@@ -1,12 +1,43 @@
 import { NextApiRequest, NextApiResponse } from 'next'
+import { MongoClient } from 'mongodb'
+import validator from 'validator'
+import { hash } from 'bcryptjs'
 
-const getMoreJobs = async (req : NextApiRequest, res : NextApiResponse) => {
+import RegisterActions from '../../useReducers/registerReducer/actionTypes'
+
+const client = new MongoClient(`${process.env.MONGODB_URI}`, { useNewUrlParser: true, useUnifiedTopology: true })
+type PassedBody = {name : string, surname : string, email : string, password : string, rpassword : string, adult : boolean}
+
+const registerUser = async (req : NextApiRequest, res : NextApiResponse) => {
+  const { name, surname, email, password, rpassword } : PassedBody = req.body
   try {
-    res.status(201).json("WORKS")
+    if (!/^[A-Za-z\s]{2,20}$/.test(name) || name.trim().length === 0) throw new Error()
+    if (!/^[A-Za-z\s]{2,30}$/.test(surname) || surname.trim().length === 0) throw new Error()
+    if (!email || !validator.isEmail(email)) throw new Error()
+    if (!/^[A-Za-z0-9!@#$_-]{8,30}$/.test(password)) throw new Error()
+    if (rpassword !== password) throw new Error()
+    await client.connect()
+    const database = client.db('Jobs')
+    const collection = database.collection('users')
+    const userNumbers = await collection.countDocuments({ email })
+    if (userNumbers > 0) return res.status(409).json(RegisterActions.EMAIL_EXISTS)
+    const hashedPassword = await hash(password, 10)
+    const user = {
+      name: name.trim().toLowerCase(),
+      surname: surname.trim().toLowerCase(),
+      email: email.trim(),
+      password: hashedPassword,
+    }
+    const result = await collection.insertOne(user);
+    if (result.insertedCount !== 1) throw new Error()
+    res.status(201).json(RegisterActions.SUCCESS)
   }
   catch {
-    res.status(500).json('ERROR')
+    res.status(500).json(RegisterActions.ERROR)
+  }
+  finally {
+    await client.close()
   }
 }
 
-export default getMoreJobs
+export default registerUser
