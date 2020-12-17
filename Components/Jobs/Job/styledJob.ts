@@ -44,10 +44,10 @@ export const StyledLink : StyledComponent<"a", any, StyledLinkProps> = styled('a
     border-bottom: ${({ theme }) => `0.5px solid ${theme.colors.lightGray}`};
     display: block;
     padding: 5px;
+    border-top: ${({ theme, index }) => index === 0 ? `0.5px solid ${theme.colors.lightGray}` : 'none'};
     
     ${({ theme }) => theme.media.desktop} {
         width: 90%;
-        border-top: ${({ theme, index }) => index === 0 ? `0.5px solid ${theme.colors.lightGray}` : 'none'};
     }
 
     ${({ theme }) => theme.media.laptop} {

@@ -5,7 +5,7 @@ import axios, { AxiosResponse } from 'axios'
 import SearchEngine from '../Components/SearchEngine/SearchEngine'
 import Filters from '../Components/Filters/Filters'
 import Jobs from '../Components/Jobs/Jobs'
-import Job from '../types/Job'
+import { Job } from '../types/Job'
 
 interface HomeProps { jobs : Array<Job> | null }
 

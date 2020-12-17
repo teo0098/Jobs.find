@@ -3,10 +3,10 @@ import Head from 'next/head'
 import { NextRouter, useRouter } from 'next/router'
 import axios, { AxiosResponse } from 'axios'
 
-import Job from '../../types/Job'
+import { Job, Job_v2 } from '../../types/Job'
 import JobPage from '../../Components/JobPage/JobPage'
 
-interface JobProps { job : Job | null }
+interface JobProps { job : Job_v2 | null }
 
 const JobId : React.FC<JobProps> = ({ job }) => {
 
@@ -17,7 +17,7 @@ const JobId : React.FC<JobProps> = ({ job }) => {
             <Head>
                 <title>
                     {isFallback ? 'Loading...' : ''}
-                    {job ? job.title : ''}
+                    {job ? job.jobData.title : ''}
                     {!job && !isFallback ? 'Ups...' : ''}
                 </title>
             </Head>
@@ -38,12 +38,17 @@ export const getStaticPaths : GetStaticPaths = async () => {
 
 export const getStaticProps : GetStaticProps = async ({ params }) => {
     
-    let job : Job | null
+    let job : Job_v2 | null
     try {
         if (!params) throw new Error()
-        const { data } : AxiosResponse<Job> = await axios.get(`${process.env.GET_JOB_API}/${params.id}.json`)
-        if (Object.keys(data).length < 11 || !data) throw new Error()        
-        job = data
+        const { data: jobData } : AxiosResponse<Job> = await axios.get(`${process.env.GET_JOB_API}/${params.id}.json`)
+        if (Object.keys(jobData).length < 11 || !jobData) throw new Error()   
+        const { data: similarJobs } : AxiosResponse<Array<Job>> = await axios.get(`${process.env.GET_JOBS_API}?location=${jobData.location}`);  
+        if (similarJobs.length === 0 || !similarJobs) throw new Error();   
+        job = {
+            jobData,
+            similarJobs
+        }
     }
     catch {
         job = null;

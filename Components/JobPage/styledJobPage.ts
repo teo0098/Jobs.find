@@ -44,13 +44,18 @@ export const StyledDesc : StyledComponent<"article", any> = styled.article`
     }
 `
 
-interface StyledPProps { desc ?: boolean }
+interface StyledPProps { desc ?: boolean, margin ?: string }
 
 export const StyledP : StyledComponent<"p", any, StyledPProps> = styled('p')<StyledPProps>`
     color: ${({ theme, desc }) => desc ? theme.colors.dark : theme.colors.lightGray};
     margin-top: ${({ desc }) => desc ? 'none' : '10px'};
     font-weight: ${({ desc }) => desc ? 'bold' : 'auto'};
     font-size: ${({ desc }) => desc ? '18px' : 'auto'};
+    margin: ${({ margin }) => margin ? margin : 'none'};
+
+    ${({ theme }) => theme.media.desktop} {
+        margin: ${({ margin }) => margin ? '0 0 10px 0' : 'none'};
+    }
 `
 
 export const StyledSpan : StyledComponent<"span", any> = styled.span`
@@ -80,20 +85,29 @@ export const StyledFavBtn = styled(StyledButton)`
     align-items: center;
 `
 
-export const StyledDiv : StyledComponent<"div", any> = styled.div`
+interface StyledDivProps {
+    grid ?: boolean;
+}
+
+export const StyledDiv : StyledComponent<"div", any, StyledDivProps> = styled.div<StyledDivProps>`
     ${({ theme }) => theme.media.desktop} {
         display: grid;
-        grid-template-columns: 68% 28%;
-        justify-content: space-between;
-        align-items: flex-start;
+        grid-template-columns: ${({ grid }) => grid ? `68% 28%` : null};
+        justify-content: ${({ grid }) => grid ? 'space-between' : null};
+        align-items: ${({ grid }) => grid ? 'flex-start' : null};
         width: 90%;
         margin: 0 auto;
-        padding: 50px 0;
+        padding-top: 50px;
 
         & > * {
-            border: ${({ theme }) => `0.5px solid ${theme.colors.lightGray}`};
+            border: ${({ theme, grid }) => grid ? `0.5px solid ${theme.colors.lightGray}` : null};
             border-bottom: none;
             border-radius: 3px;
+            padding-top: ${({ grid }) => !grid ? 'unset' : null};
+        }
+
+        & > * > * {
+            width: ${({ grid }) => !grid ? '100%' : null};
         }
     }
 

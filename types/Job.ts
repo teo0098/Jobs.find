@@ -1,4 +1,4 @@
-type Job = {
+export type Job = {
     id : string,
     type : string,
     url : string,
@@ -12,4 +12,7 @@ type Job = {
     company_logo : string
 }
 
-export default Job
+export type Job_v2 = {
+    jobData : Job,
+    similarJobs : Array<Job>
+}

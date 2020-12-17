@@ -1,6 +1,6 @@
-import Job from '../../types/Job'
+import { Job_v2 } from '../../types/Job'
 
 export default interface JobPageProps {
-    job : Job | null;
+    job : Job_v2 | null;
     isFallback : boolean;
 }

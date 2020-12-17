@@ -3,11 +3,11 @@ import { useRouter, NextRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
 
 import axios from '../../axiosInstance'
-import JobType from '../../types/Job'
+import { Job } from '../../types/Job'
 import { reducer, initialState, StateType } from '../../useReducers/jobsReducer/jobsReducer'
 import JobsActions from '../../useReducers/jobsReducer/actionTypes'
 
-type Function = (jobs : Array<JobType> | null) => { getMoreJobs : () => Promise<void>, state : StateType, query : ParsedUrlQuery};
+type Function = (jobs : Array<Job> | null) => { getMoreJobs : () => Promise<void>, state : StateType, query : ParsedUrlQuery};
 
 const useJobs : Function = (jobs) => {
 
