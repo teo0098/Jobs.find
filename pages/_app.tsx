@@ -1,10 +1,19 @@
 import { useEffect } from 'react'
 import { ThemeProvider } from 'styled-components'
 import Head from 'next/head'
+import { createStore, Store } from 'redux'
+import { Provider } from 'react-redux'
+import { persistStore } from 'redux-persist'
+import { PersistGate } from 'redux-persist/integration/react'
 
 import GlobalStyles from '../styles/global'
-import Layout from '../Components/Layout/Layout';
+import Layout from '../Components/Layout/Layout'
 import Theme from '../styles/theme'
+import rootReducer from '../store/reducer'
+import { ActionType } from '../store/favJobs/favJobsReducer'
+
+const store : Store<ActionType> = createStore(rootReducer)
+const persistor = persistStore(store)
 
 type AppType = ({ Component, pageProps }: { Component: any, pageProps: any}) => JSX.Element
 
@@ -21,12 +30,16 @@ const App : AppType = ({ Component, pageProps }) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <ThemeProvider theme={Theme}>
-          <GlobalStyles />
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-      </ThemeProvider>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <ThemeProvider theme={Theme}>
+              <GlobalStyles />
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+          </ThemeProvider>
+        </PersistGate>
+      </Provider>
     </>
   )
 } 
