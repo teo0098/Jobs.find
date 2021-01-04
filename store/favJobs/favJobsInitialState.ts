@@ -1,13 +1,11 @@
 import { Job } from '../../types/Job'
 
-type FavJobsInitialStateType = {
+export type FavJobsInitialStateType = {
     amount : number,
     jobs : Array<Job>
 }
 
-const favJobsInitialState : FavJobsInitialStateType = {
+export const favJobsInitialState : FavJobsInitialStateType = {
     amount: 0,
     jobs: []
 }
-
-export default favJobsInitialState

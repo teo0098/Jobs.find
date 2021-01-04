@@ -1,4 +1,4 @@
-import favJobsInitialState from './favJobsInitialState'
+import { favJobsInitialState } from './favJobsInitialState'
 import FavJobsActionTypes from './favJobsActionTypes'
 import { Job } from '../../types/Job'
 

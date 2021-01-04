@@ -7,7 +7,7 @@ import FavouitesProps from '../Menu/menuProps'
 
 const Favourites : React.FC<FavouitesProps> = ({ turnOfNav }) => (
     <div onClick={turnOfNav}>
-        <Link href='/favourites' passHref>
+        <Link href='/favourites/local' passHref>
             <StyledLink noBorder>
                 <FavouriteIcon style={{ marginTop: '4px' }} />
             </StyledLink>
