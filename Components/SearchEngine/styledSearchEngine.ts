@@ -29,11 +29,11 @@ export const StyledSearchEngine : StyledComponent<"input", any> = styled.input`
     }
 `
 
-interface StyledButtonProps { width : string, offsetTop ?: string, fontSize : string }
+interface StyledButtonProps { width : string, offsetTop ?: string, fontSize : string, color ?: string }
 
 export const StyledButton : StyledComponent<"button", any, StyledButtonProps> = styled('button')<StyledButtonProps>`
     ${sharedStyles}
-    background-color: ${({ theme }) => theme.colors.lightBlue};
+    background-color: ${({ theme, color }) => color ? color : theme.colors.lightBlue};
     width: ${({ width }) => width};
     padding: 10px 5px;
     color: ${({ theme }) => theme.colors.light};

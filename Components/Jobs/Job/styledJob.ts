@@ -37,14 +37,14 @@ export const StyledP : StyledComponent<"p", any, StyledPProps> = styled('p')<Sty
     }
 `
 
-interface StyledLinkProps { index : number }
+interface StyledLinkProps { index : number, border ?: boolean }
 
 export const StyledLink : StyledComponent<"a", any, StyledLinkProps> = styled('a')<StyledLinkProps>`
     border-left: ${({ theme }) => `6px solid ${theme.colors.dark}`};
     border-bottom: ${({ theme }) => `0.5px solid ${theme.colors.lightGray}`};
     display: block;
     padding: 5px;
-    border-top: ${({ theme, index }) => index === 0 ? `0.5px solid ${theme.colors.lightGray}` : 'none'};
+    border-top: ${({ theme, index, border }) => index === 0 || border ? `0.5px solid ${theme.colors.lightGray}` : 'none'};
     
     ${({ theme }) => theme.media.desktop} {
         width: 90%;

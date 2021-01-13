@@ -5,5 +5,5 @@ export default interface JobPageProps {
     isFallback : boolean;
     addJob : (job: Job) => void;
     removeJob : (jobs: Array<Job>, job: Job) => void;
-    clearJobs : () => void;
+    jobs : Array<Job>;
 }

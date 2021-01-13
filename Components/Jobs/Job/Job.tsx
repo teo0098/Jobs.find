@@ -4,9 +4,9 @@ import { memo } from 'react'
 import JobProps from './jobProps'
 import { StyledImg, StyledMainSection, StyledP, StyledLink, StyledSection, StyledDiv, StyledH4 } from './styledJob'
 
-const Job : React.FC<JobProps> = ({ title, id, company_logo, company, location, created_at, index }) => (
+const Job : React.FC<JobProps> = ({ title, id, company_logo, company, location, created_at, index, border }) => (
     <Link href={`/jobs/${encodeURIComponent(id)}`} passHref>
-        <StyledLink index={index}>
+        <StyledLink border={border} index={index}>
             <StyledMainSection>
                 <StyledImg src={`${company_logo ? company_logo : ''}`} alt="Company logo" />
                 <StyledSection>

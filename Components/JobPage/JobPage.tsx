@@ -8,8 +8,12 @@ import Error from '../Error/Error'
 import Loader from '../Loader/Loader'
 import Jobs from '../Jobs/Jobs'
 import mapFavJobsDispatchToProps from '../../store/favJobs/mapFavJobsDispatchToProps'
+import useJob from '../customHooks/useJob'
+import Theme from '../../styles/theme'
 
-const JobPage : React.FC<JobPageProps> = ({ job, isFallback, addJob }) => {
+const JobPage : React.FC<JobPageProps> = ({ job, isFallback, addJob, jobs, removeJob }) => {
+
+    const { isJobInFavourite } = useJob()
 
     if (isFallback) return (
         <div style={{ margin: '20px' }}>
@@ -51,7 +55,11 @@ const JobPage : React.FC<JobPageProps> = ({ job, isFallback, addJob }) => {
                     </SC.StyledInfo>
                     <SC.StyledInfo>
                         <SC.StyledP desc>Has that job suited you?</SC.StyledP>
-                        <SC.StyledFavBtn onClick={() => addJob(job.jobData)} width="100%" fontSize="16px">Add to <FavouriteIcon style={{ marginLeft: '5px' }} /></SC.StyledFavBtn>
+                        {isJobInFavourite(jobs, job.jobData) ?
+                            <SC.StyledFavBtn color={Theme.colors.error} onClick={() =>  removeJob(jobs, job.jobData)} width="100%" fontSize="16px">Remove from <FavouriteIcon style={{ marginLeft: '5px' }} /></SC.StyledFavBtn>
+                            :
+                            <SC.StyledFavBtn onClick={() => addJob(job.jobData)} width="100%" fontSize="16px">Add to <FavouriteIcon style={{ marginLeft: '5px' }} /></SC.StyledFavBtn>
+                        }
                     </SC.StyledInfo>
                 </SC.StyledStickyApply>
             </SC.StyledDiv>
@@ -65,4 +73,8 @@ const JobPage : React.FC<JobPageProps> = ({ job, isFallback, addJob }) => {
     )
 }
 
-export default connect(null, mapFavJobsDispatchToProps)(JobPage)
+const mapFavJobsStateToProps = (state : any) => ({
+    jobs : state.favJobs.jobs
+})
+
+export default connect(mapFavJobsStateToProps, mapFavJobsDispatchToProps)(JobPage)

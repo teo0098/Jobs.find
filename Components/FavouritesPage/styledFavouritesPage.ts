@@ -18,8 +18,8 @@ export const StyledLink : StyledComponent<"a", any, StyledLinkProps> = styled.a<
     padding: 10px;
     display: block;
     text-align: center;
-    border: ${({ active, theme }) => active ? `4px solid ${theme.colors.lightBlue}` : 'none'};
-    border-bottom: ${({ active, theme }) => active ? `unset` : `4px solid ${theme.colors.lightBlue}`};
+    border: ${({ active, theme }) => active ? `3px solid ${theme.colors.lightBlue}` : 'none'};
+    border-bottom: ${({ active, theme }) => active ? `unset` : `3px solid ${theme.colors.lightBlue}`};
     width: 100%;
 `
 
@@ -28,6 +28,13 @@ export const StyledLinks : StyledComponent<"div", any> = styled.div`
 `
 
 export const StyledData : StyledComponent<"div", any> = styled.div`
-    border: ${({ theme }) => `4px solid ${theme.colors.lightBlue}`};
+    border: ${({ theme }) => `3px solid ${theme.colors.lightBlue}`};
     border-top: unset;
+`
+
+export const StyledJob : StyledComponent<"div", any> = styled.div`
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    margin-bottom: 20px;
 `
