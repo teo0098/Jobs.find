@@ -12,7 +12,7 @@ const useSignin = () => {
         dispatch({ type: actionTypes.LOADING, errorMsg: '' })
         try {
             const { data, status } = await axios.post('/api/login', values)
-            if (!data || status === 500) throw new Error()
+            if (status === 500) throw new Error()
             if (status === 403) return dispatch({ type: actionTypes.ERROR, errorMsg: data })
             dispatch({ type: actionTypes.SUCCESS, errorMsg: '' })
         }
