@@ -36,16 +36,37 @@ Cypress.Commands.add('requestSeekJobs', filter => {
 Cypress.Commands.add('registerUser', code => {
     cy.get('input[name=email]').type("something@wp.pl")
     cy.get('button[type="submit"]').click()
-    cy.request('POST', '/api/account', {
-        name: 'Jan',
-        surname: 'Kowalski',
-        email: 'something@wp.pl',
-        password: '12345678',
-        rpassword: '12345678',
-        adult: true
+    cy.request({
+        method: 'POST',
+        url: '/api/account',
+        failOnStatusCode: false,
+        body: { 
+            name: 'Jan',
+            surname: 'Kowalski',
+            email: 'something@wp.pl',
+            password: '12345678',
+            rpassword: '12345678',
+            adult: true 
+        }
     }).then(({ body, status }) => {
         cy.get('#loader').should('not.be.visible')
         expect(status).to.eq(code)
         expect(body).to.be.a('string')
+    })
+})
+
+Cypress.Commands.add('loginUser', (code, email, password) => {
+    cy.get('input[name=email]').type(email)
+    cy.get('input[name=password]').type(password)
+    cy.get('button[type="submit"]').click()
+    cy.get('#loader').should('be.visible')
+    cy.request({
+        method: 'POST',
+        url: '/api/login',
+        failOnStatusCode: false,
+        body: { email, password }
+    }).then(({ status }) => {
+        cy.get('#loader').should('not.be.visible')
+        expect(status).to.eq(code)
     })
 })

@@ -54,7 +54,7 @@ export const getStaticProps : GetStaticProps = async ({ params }) => {
         job = null;
     }
     
-    return { props: { job } }
+    return { props: { job }, revalidate: 3600 }
 }
 
 export default JobId

@@ -14,7 +14,7 @@ const useSignup : Function = () => {
         dispatch({ type: RegisterActions.LOADING, errorMsg: '' })
         try {
             const { data, status } = await axios.post('/api/account', values)
-            if (!data || status === 500 || data === RegisterActions.ERROR) throw new Error()
+            if (!data || status === 500) throw new Error()
             if (data === RegisterActions.EMAIL_EXISTS || status === 409) return dispatch({ type: RegisterActions.ERROR, errorMsg: RegisterActions.EMAIL_IN_USE })
             dispatch({ type: RegisterActions.SUCCESS, errorMsg: '' })
         }

@@ -30,11 +30,11 @@ export const StyledLinks : StyledComponent<"div", any> = styled.div`
 export const StyledData : StyledComponent<"div", any> = styled.div`
     border: ${({ theme }) => `3px solid ${theme.colors.lightBlue}`};
     border-top: unset;
+    padding: 5px;
 `
 
 export const StyledJob : StyledComponent<"div", any> = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 5px;
-    margin-bottom: 20px;
+    margin-top: 20px;
 `

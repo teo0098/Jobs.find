@@ -1,4 +1,4 @@
-import JobType from '../../types/Job'
+import { Job as JobType } from '../../types/Job'
 import JobsActions from './actionTypes'
 
 export const initialState = (jobs : Array<JobType> | null) => ({
