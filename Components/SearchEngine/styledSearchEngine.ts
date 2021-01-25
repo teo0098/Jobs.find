@@ -29,7 +29,7 @@ export const StyledSearchEngine : StyledComponent<"input", any> = styled.input`
     }
 `
 
-interface StyledButtonProps { width : string, offsetTop ?: string, fontSize : string, color ?: string }
+interface StyledButtonProps { width : string, offsetTop ?: string, fontSize : string, color ?: string, expand ?: string }
 
 export const StyledButton : StyledComponent<"button", any, StyledButtonProps> = styled('button')<StyledButtonProps>`
     ${sharedStyles}
@@ -42,6 +42,6 @@ export const StyledButton : StyledComponent<"button", any, StyledButtonProps> = 
     margin-top: ${({ offsetTop }) => offsetTop};
 
     ${({ theme }) => theme.media.tablet} {
-        width: 150px;
+        width: ${({ expand }) => expand ? expand : '150px'};
     }
 `

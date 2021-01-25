@@ -2,9 +2,10 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { connect } from 'react-redux'
+import cookies from 'js-cookie'
 
 import FavouritesPageProps from './favouritesPageProps'
-import { StyledDiv, StyledLink, StyledLinks, StyledData, StyledJob } from './styledFavouritesPage'
+import { StyledDiv, StyledLink, StyledLinks, StyledData, StyledJob, StyledButtons } from './styledFavouritesPage'
 import Job from '../Jobs/Job/Job'
 import { StyledButton } from '../SearchEngine/styledSearchEngine'
 import Theme from '../../styles/theme'
@@ -27,14 +28,25 @@ const FavouritesPage : React.FC<FavouritesPageProps> = ({ jobs, amount, removeJo
             <StyledData>
                 <p>Amount: {amount} </p>
                 {jobs.length === 0 ?
-                    <p>Zobacz wiecej</p>
+                    null
                     :
                     jobs.map((job, index : number) => (
                         <StyledJob key={job.id}>
-                            <Job border={true} index={index} title={job.title} id={job.id} company_logo={job.company_logo} company={job.company} location={job.location} created_at={job.created_at} />
-                            <StyledButton onClick={() => removeJob(jobs, job)} color={Theme.colors.error} offsetTop='10px' width='100%' fontSize='15px'>
-                                <DeleteForeverIcon />
-                            </StyledButton>
+                            <Job width='100%' border={true} index={index} title={job.title} id={job.id} company_logo={job.company_logo} company={job.company} location={job.location} created_at={job.created_at} />
+                            <StyledButtons>
+                                <StyledButton onClick={() => removeJob(jobs, job)} color={Theme.colors.error} offsetTop='5px' width='100%' fontSize='15px'>
+                                    <DeleteForeverIcon />
+                                </StyledButton>
+                                {cookies.get('name') || cookies.get('refreshToken') ?
+                                    <StyledButton offsetTop='5px' width='100%' fontSize='15px'>
+                                        Add to cloud
+                                    </StyledButton>
+                                    :
+                                    <StyledButton style={{ cursor: 'not-allowed' }} color={Theme.colors.lightGray} disabled expand='300px' offsetTop='5px' width='100%' fontSize='15px'>
+                                        Log in to synchronize with cloud
+                                    </StyledButton>
+                                }
+                            </StyledButtons>
                         </StyledJob>
                     ))
                 }

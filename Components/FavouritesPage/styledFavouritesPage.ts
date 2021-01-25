@@ -38,3 +38,12 @@ export const StyledJob : StyledComponent<"div", any> = styled.div`
     flex-direction: column;
     margin-top: 20px;
 `
+
+export const StyledButtons : StyledComponent<"div", any> = styled.div`
+    ${({ theme }) => theme.media.tablet} {
+        display: grid;
+        grid-template-columns: min-content auto;
+        justify-content: center;
+        column-gap: 10px;
+    }
+`

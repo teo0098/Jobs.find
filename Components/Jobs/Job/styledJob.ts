@@ -37,7 +37,7 @@ export const StyledP : StyledComponent<"p", any, StyledPProps> = styled('p')<Sty
     }
 `
 
-interface StyledLinkProps { index : number, border ?: boolean }
+interface StyledLinkProps { index : number, border ?: boolean, width ?: string }
 
 export const StyledLink : StyledComponent<"a", any, StyledLinkProps> = styled('a')<StyledLinkProps>`
     border-left: ${({ theme }) => `6px solid ${theme.colors.dark}`};
@@ -47,11 +47,11 @@ export const StyledLink : StyledComponent<"a", any, StyledLinkProps> = styled('a
     border-top: ${({ theme, index, border }) => index === 0 || border ? `0.5px solid ${theme.colors.lightGray}` : 'none'};
     
     ${({ theme }) => theme.media.desktop} {
-        width: 90%;
+        width: ${({ width }) => width ? width : '90%'};
     }
 
     ${({ theme }) => theme.media.laptop} {
-        width: 75%;
+        width: ${({ width }) => width ? width : '75%'};
     }
 `
 

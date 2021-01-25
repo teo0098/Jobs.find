@@ -16,15 +16,15 @@ const Navigation : React.FC = () => {
 
     return (
         <StyledNavigation>
-            <Logo turnOfNav={handleOnClick} />
+            <Logo turnOffNav={handleOnClick} />
             <StyledMobileOptions>
-                <Favourites turnOfNav={handleOnClick} />
+                <Favourites turnOffNav={handleOnClick} />
                 <Hamburger launchMenu={launchMenu} setLaunchMenu={setLaunchMenu} />
             </StyledMobileOptions>
             <AnimatePresence>
                 {launchMenu && (
                     <StyledMenuContainer id='menu' variants={variants} initial="hidden" animate="visible" exit="hidden">
-                        <Menu turnOfNav={handleOnClick} />
+                        <Menu turnOffNav={handleOnClick} />
                     </StyledMenuContainer>
                 )}
             </AnimatePresence>

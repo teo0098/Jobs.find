@@ -6,5 +6,6 @@ export default interface JobProps {
     location : string;
     created_at : string;
     index : number;
-    border ?: boolean
+    border ?: boolean;
+    width ?: string;
 }

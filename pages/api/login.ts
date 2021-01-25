@@ -21,6 +21,8 @@ const login = async (req : NextApiRequest, res : NextApiResponse) => {
         if (!match) return res.status(403).json('Wrong credentials')
         const accessToken = sign({ user: user.name }, `${process.env.ACCESS_TOKEN_SECRET}`, { expiresIn: '5m' })
         const refreshToken = sign({ user: user.name }, `${process.env.REFRESH_TOKEN_SECRET}`, { expiresIn: '1d' })
+        const result = await collection.updateOne({ email }, { $set: { accessToken, refreshToken } })
+        if (result.modifiedCount !== 1) throw new Error()
         res.setHeader('Set-Cookie', [
             serialize('name', user.name, {
                 path: '/',

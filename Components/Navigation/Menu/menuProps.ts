@@ -1,3 +1,3 @@
 export default interface MenuProps {
-    turnOfNav ?: () => void | null
+    turnOffNav ?: () => void | null
 }
