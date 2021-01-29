@@ -8,10 +8,12 @@ import Theme from '../../../../styles/theme';
 import { StyledProfile, StyledSubmenu, StyledUserMenu } from './styledProfile'
 import { StyledLink } from '../styledMenu'
 import variants from './animationVariants'
+import useLogout from '../../../customHooks/useLogout';
 
 const Profile = () => {
 
     const [submenu, setSubmenu] = useState<boolean>(false)
+    const { logout } = useLogout()
 
     return (
         <>
@@ -29,8 +31,12 @@ const Profile = () => {
                             <Link href='/signin' passHref>
                                 <StyledLink paddingLeft='40px' backgroundColor={Theme.colors.light} textColor={Theme.colors.dark}>My profile</StyledLink>
                             </Link>
-                            <Link href='/signin' passHref>
-                                <StyledLink paddingLeft='40px' backgroundColor={Theme.colors.light} textColor={Theme.colors.dark}>Log out</StyledLink>
+                            <Link href='#' passHref>
+                                <StyledLink onClick={e => {
+                                    e.stopPropagation()
+                                    setSubmenu(false)
+                                    logout()
+                                }} paddingLeft='40px' backgroundColor={Theme.colors.light} textColor={Theme.colors.dark}>Log out</StyledLink>
                             </Link>
                         </StyledSubmenu>
                     </StyledUserMenu>

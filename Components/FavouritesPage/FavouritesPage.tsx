@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
 import { connect } from 'react-redux'
 import cookies from 'js-cookie'
 
@@ -10,10 +10,35 @@ import Job from '../Jobs/Job/Job'
 import { StyledButton } from '../SearchEngine/styledSearchEngine'
 import Theme from '../../styles/theme'
 import mapFavJobsDispatchToProps from '../../store/favJobs/mapFavJobsDispatchToProps'
+import useManageFavJobs from '../customHooks/useManageFavJobs';
+import Loader from '../Loader/Loader'
+import Modal from '../Modal/Modal'
+import Info from '../Info/Info'
+import InfoTypes from '../Info/InfoTypes'
 
 const FavouritesPage : React.FC<FavouritesPageProps> = ({ jobs, amount, removeJob }) => {
 
     const { pathname } = useRouter()
+    const { addJobToDb, state: { loading, success, error, errorMsg }, job: selectedJob } = useManageFavJobs()
+
+    const renderStatus = () => {
+        if (loading) return <Loader />
+        else if (error) return (
+            <Modal>
+                <Info state={InfoTypes.ERROR}>
+                    {errorMsg}
+                </Info>
+            </Modal>
+        )
+        else if (success) return (
+            <Modal>
+                <Info state={InfoTypes.SUCCESS}>
+                    This job has been synchronized with cloud successfully
+                </Info>
+            </Modal>
+        )
+        return null
+    }
 
     return (
         <StyledDiv>
@@ -38,9 +63,12 @@ const FavouritesPage : React.FC<FavouritesPageProps> = ({ jobs, amount, removeJo
                                     <DeleteForeverIcon />
                                 </StyledButton>
                                 {cookies.get('name') || cookies.get('refreshToken') ?
-                                    <StyledButton offsetTop='5px' width='100%' fontSize='15px'>
-                                        Add to cloud
-                                    </StyledButton>
+                                    <>
+                                        <StyledButton disabled={loading} onClick={() => addJobToDb(job)} offsetTop='5px' width='100%' fontSize='15px'>
+                                            Add to cloud
+                                        </StyledButton>
+                                        {selectedJob?.id === job.id ? renderStatus() : null}
+                                    </>
                                     :
                                     <StyledButton style={{ cursor: 'not-allowed' }} color={Theme.colors.lightGray} disabled expand='300px' offsetTop='5px' width='100%' fontSize='15px'>
                                         Log in to synchronize with cloud

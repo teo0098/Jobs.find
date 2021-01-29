@@ -4,16 +4,15 @@ import axios from '../../axiosInstance'
 import { initialState, reducer } from '../../useReducers/registerReducer/registerReducer'
 import RegisterActions from '../../useReducers/registerReducer/actionTypes'
 
-const useSignin = () => {
+const useLogout = () => {
 
     const [state, dispatch] = useReducer(reducer, initialState)
 
-    const handleOnSubmit = async (values : any) => {
+    const logout = async () => {
         dispatch({ type: RegisterActions.LOADING, errorMsg: '' })
         try {
-            const { data, status } = await axios.post('/api/login', values)
+            const { status } = await axios.get('/api/logout')
             if (status === 500) throw new Error()
-            if (status === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: data })
             dispatch({ type: RegisterActions.SUCCESS, errorMsg: '' })
         }
         catch {
@@ -21,7 +20,7 @@ const useSignin = () => {
         }
     }
 
-    return { handleOnSubmit, state }
+    return { logout, state }
 }
 
-export default useSignin
+export default useLogout

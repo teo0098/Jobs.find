@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { connectToDatabase } from '../../utils/mongodb'
 import validator from 'validator'
 import { hash } from 'bcryptjs'
+
+import { connectToDatabase } from '../../utils/mongodb'
 
 import RegisterActions from '../../useReducers/registerReducer/actionTypes'
 

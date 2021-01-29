@@ -1,9 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { connectToDatabase } from '../../utils/mongodb'
 import validator from 'validator'
 import { compare } from 'bcryptjs'
 import { sign } from 'jsonwebtoken'
-import { serialize } from 'cookie'
+
+import { connectToDatabase } from '../../utils/mongodb'
+import generateCookies from '../../utils/middlewares/generateCookies'
 
 type PassedBody = {email : string, password : string}
 
@@ -19,32 +20,11 @@ const login = async (req : NextApiRequest, res : NextApiResponse) => {
         const user = await collection.findOne({ email })
         const match = await compare(password, user.password)
         if (!match) return res.status(403).json('Wrong credentials')
-        const accessToken = sign({ user: user.name }, `${process.env.ACCESS_TOKEN_SECRET}`, { expiresIn: '5m' })
-        const refreshToken = sign({ user: user.name }, `${process.env.REFRESH_TOKEN_SECRET}`, { expiresIn: '1d' })
+        const accessToken = sign({ user: user._id }, `${process.env.ACCESS_TOKEN_SECRET}`, { expiresIn: '5m' })
+        const refreshToken = sign({ user: user._id }, `${process.env.REFRESH_TOKEN_SECRET}`, { expiresIn: '1d' })
         const result = await collection.updateOne({ email }, { $set: { accessToken, refreshToken } })
         if (result.modifiedCount !== 1) throw new Error()
-        res.setHeader('Set-Cookie', [
-            serialize('name', user.name, {
-                path: '/',
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
-                maxAge: 60 * 60 * 24 // 1 day
-            }),
-            serialize('accessToken', accessToken, {
-                path: '/',
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
-                maxAge: 60 * 5 // 5 minutes
-            }),
-            serialize('refreshToken', refreshToken, {
-                path: '/',
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
-                maxAge: 60 * 60 * 24 // 1 day
-            })
-        ])
+        generateCookies(res, user.name, user._id, accessToken, refreshToken)
         res.status(200).end()
     }
     catch {
