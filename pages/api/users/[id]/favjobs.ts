@@ -13,11 +13,11 @@ const favJobs = async (req : NextApiRequest, res : NextApiResponse) => {
     switch (method) {
         case 'POST': {
             try {
-                const { db } = await connectToDatabase()
-                const collection = db.collection('users')
                 const decodedToken = verify(cookies['accessToken'], `${process.env.ACCESS_TOKEN_SECRET}`)
                 if ((decodedToken as VerifyToken).user !== query.id) return res.status(403).json('Wrong credentials')
                 const _id : ObjectID = new ObjectID((decodedToken as VerifyToken).user)
+                const { db } = await connectToDatabase()
+                const collection = db.collection('users')
                 const userNumbers : number = await collection.countDocuments({ _id })
                 if (userNumbers === 0) return res.status(403).json('Wrong credentials')
                 const user = await collection.findOne({ _id })

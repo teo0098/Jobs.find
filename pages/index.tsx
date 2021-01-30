@@ -23,6 +23,7 @@ const Home : React.FC<HomeProps> = ({ jobs }) => (
 export const getStaticProps : GetStaticProps = async () => {
   
   let jobs : Array<Job> | null
+  
   try {
     const { data } : AxiosResponse<Array<Job>> = await axios.get(`${process.env.GET_JOBS_API}`)
     if (data.length === 0 || !data) throw new Error();
