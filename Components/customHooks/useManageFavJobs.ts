@@ -11,11 +11,13 @@ const useManageFavJobs = () => {
     const [state, dispatch] = useReducer(reducer, initialState)
     const [job, setJob] = useState<Job | null>(null)
 
-    const add = async () => {
+    const add = async (offer : Job) => {
         dispatch({ type: RegisterActions.LOADING, errorMsg: '' })
         try {
-            const d = await axios.post(`/api/users/${cookies.get('_id')}/favjobs`, job)
-            console.log(d)
+            const { status, data } = await axios.post(`/api/users/${cookies.get('_id')}/favjobs`, offer)
+            if (status === 500) throw new Error()
+            if (status === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: data })
+            if (status === 409) return dispatch({ type: RegisterActions.ERROR, errorMsg: RegisterActions.JOB_EXISTS })
             dispatch({ type: RegisterActions.SUCCESS, errorMsg: '' })
         }
         catch {
@@ -23,9 +25,9 @@ const useManageFavJobs = () => {
         }
     }
 
-    const addJobToDb = (job : Job) => {
-        setJob(job)
-        add()
+    const addJobToDb = (offer : Job) => {
+        setJob(offer)
+        add(offer)
     }
 
     const removeJobFromDb = () => {

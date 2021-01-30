@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import cookies from 'js-cookie'
 
 import FavouritesPageProps from './favouritesPageProps'
-import { StyledDiv, StyledLink, StyledLinks, StyledData, StyledJob, StyledButtons } from './styledFavouritesPage'
+import * as SC from './styledFavouritesPage'
 import Job from '../Jobs/Job/Job'
 import { StyledButton } from '../SearchEngine/styledSearchEngine'
 import Theme from '../../styles/theme'
@@ -24,41 +24,45 @@ const FavouritesPage : React.FC<FavouritesPageProps> = ({ jobs, amount, removeJo
     const renderStatus = () => {
         if (loading) return <Loader />
         else if (error) return (
-            <Modal>
-                <Info state={InfoTypes.ERROR}>
-                    {errorMsg}
-                </Info>
-            </Modal>
+            <SC.StyledWrapper>
+                <Modal>
+                    <Info state={InfoTypes.ERROR}>
+                        {errorMsg}
+                    </Info>
+                </Modal>
+            </SC.StyledWrapper>
         )
         else if (success) return (
-            <Modal>
-                <Info state={InfoTypes.SUCCESS}>
-                    This job has been synchronized with cloud successfully
-                </Info>
-            </Modal>
+            <SC.StyledWrapper>
+                <Modal>
+                    <Info state={InfoTypes.SUCCESS}>
+                        This job has been synchronized with cloud successfully
+                    </Info>
+                </Modal>
+            </SC.StyledWrapper>
         )
         return null
     }
 
     return (
-        <StyledDiv>
-            <StyledLinks>
+        <SC.StyledDiv>
+            <SC.StyledLinks>
                 <Link href='/favourites/local' passHref>
-                    <StyledLink active={pathname.includes('local') ? true : false}>Favourite jobs on this device</StyledLink>
+                    <SC.StyledLink active={pathname.includes('local') ? true : false}>Favourite jobs on this device</SC.StyledLink>
                 </Link>
                 <Link href='/favourites/cloud' passHref>
-                    <StyledLink active={pathname.includes('cloud') ? true : false}>Favourite jobs in a cloud</StyledLink>
+                    <SC.StyledLink active={pathname.includes('cloud') ? true : false}>Favourite jobs in a cloud</SC.StyledLink>
                 </Link>
-            </StyledLinks>
-            <StyledData>
+            </SC.StyledLinks>
+            <SC.StyledData>
                 <p>Amount: {amount} </p>
                 {jobs.length === 0 ?
                     null
                     :
                     jobs.map((job, index : number) => (
-                        <StyledJob key={job.id}>
+                        <SC.StyledJob key={job.id}>
                             <Job width='100%' border={true} index={index} title={job.title} id={job.id} company_logo={job.company_logo} company={job.company} location={job.location} created_at={job.created_at} />
-                            <StyledButtons>
+                            <SC.StyledButtons>
                                 <StyledButton onClick={() => removeJob(jobs, job)} color={Theme.colors.error} offsetTop='5px' width='100%' fontSize='15px'>
                                     <DeleteForeverIcon />
                                 </StyledButton>
@@ -74,12 +78,12 @@ const FavouritesPage : React.FC<FavouritesPageProps> = ({ jobs, amount, removeJo
                                         Log in to synchronize with cloud
                                     </StyledButton>
                                 }
-                            </StyledButtons>
-                        </StyledJob>
+                            </SC.StyledButtons>
+                        </SC.StyledJob>
                     ))
                 }
-            </StyledData>
-        </StyledDiv>
+            </SC.StyledData>
+        </SC.StyledDiv>
     )
 } 
 

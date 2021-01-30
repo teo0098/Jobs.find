@@ -1,7 +1,7 @@
 import { NextApiResponse } from "next";
 import { serialize } from 'cookie'
 
-const generateCookies = (res : NextApiResponse, name : string, id : string, accessToken : string, refreshToken : string) => {
+const generateCookies = (res : NextApiResponse, name : string, id : string, accessToken : string) => {
     res.setHeader('Set-Cookie', [
         serialize('name', name, {
             path: '/',
@@ -16,13 +16,6 @@ const generateCookies = (res : NextApiResponse, name : string, id : string, acce
             maxAge: 60 * 60 * 24 // 1 day
         }),
         serialize('accessToken', accessToken, {
-            path: '/',
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
-            maxAge: 60 * 5 // 5 minutes
-        }),
-        serialize('refreshToken', refreshToken, {
             path: '/',
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',

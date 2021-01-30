@@ -18,7 +18,7 @@ const registerUser = async (req : NextApiRequest, res : NextApiResponse) => {
         if (rpassword !== password) throw new Error()
         const { db } = await connectToDatabase()
         const collection = db.collection('users')
-        const userNumbers = await collection.countDocuments({ email })
+        const userNumbers : number = await collection.countDocuments({ email })
         if (userNumbers > 0) return res.status(409).json(RegisterActions.EMAIL_EXISTS)
         const hashedPassword = await hash(password, 10)
         const user = {
@@ -27,8 +27,7 @@ const registerUser = async (req : NextApiRequest, res : NextApiResponse) => {
             email: email.trim(),
             password: hashedPassword,
             favJobs: [],
-            accessToken: '',
-            refreshToken: ''
+            accessToken: ''
         }
         const result = await collection.insertOne(user);
         if (result.insertedCount !== 1) throw new Error()

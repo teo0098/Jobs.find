@@ -47,3 +47,8 @@ export const StyledButtons : StyledComponent<"div", any> = styled.div`
         column-gap: 10px;
     }
 `
+
+export const StyledWrapper : StyledComponent<"div", any> = styled.div`
+    margin: 10px 0;
+    text-align: center;
+`
