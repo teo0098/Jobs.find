@@ -34,7 +34,8 @@ interface StyledButtonProps { width : string, offsetTop ?: string, fontSize : st
 export const StyledButton : StyledComponent<"button", any, StyledButtonProps> = styled('button')<StyledButtonProps>`
     ${sharedStyles}
     background-color: ${({ theme, color }) => color ? color : theme.colors.lightBlue};
-    width: ${({ width }) => width};
+    min-width: ${({ width }) => width};
+    max-width: 100%;
     padding: 10px 5px;
     color: ${({ theme }) => theme.colors.light};
     font-size: ${({ fontSize }) => fontSize};
@@ -42,6 +43,7 @@ export const StyledButton : StyledComponent<"button", any, StyledButtonProps> = 
     margin-top: ${({ offsetTop }) => offsetTop};
 
     ${({ theme }) => theme.media.tablet} {
-        width: ${({ expand }) => expand ? expand : '150px'};
+        min-width: ${({ expand }) => expand ? expand : '150px'};
+        max-width: 100%;
     }
 `

@@ -42,13 +42,17 @@ export const StyledJob : StyledComponent<"div", any> = styled.div`
 export const StyledButtons : StyledComponent<"div", any> = styled.div`
     ${({ theme }) => theme.media.tablet} {
         display: grid;
-        grid-template-columns: min-content auto;
+        grid-template-columns: min-content min-content;
         justify-content: center;
         column-gap: 10px;
     }
 `
 
 export const StyledWrapper : StyledComponent<"div", any> = styled.div`
-    margin: 10px 0;
     text-align: center;
+    grid-column: 1 / span 2;
+
+    & > * {
+        margin-top: 5px;
+    }
 `

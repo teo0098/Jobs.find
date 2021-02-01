@@ -15,7 +15,7 @@ const Navigation : React.FC = () => {
     const handleOnClick = () => launchMenu && setLaunchMenu ? setLaunchMenu(false) : null
 
     return (
-        <StyledNavigation>
+        <StyledNavigation onClick={() => setLaunchMenu(false)}>
             <Logo turnOffNav={handleOnClick} />
             <StyledMobileOptions>
                 <Favourites turnOffNav={handleOnClick} />

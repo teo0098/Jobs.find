@@ -9,11 +9,12 @@ import { StyledProfile, StyledSubmenu, StyledUserMenu } from './styledProfile'
 import { StyledLink } from '../styledMenu'
 import variants from './animationVariants'
 import useLogout from '../../../customHooks/useLogout';
+import Loader from '../../../Loader/Loader';
 
 const Profile = () => {
 
     const [submenu, setSubmenu] = useState<boolean>(false)
-    const { logout } = useLogout()
+    const { logout, state: { loading } } = useLogout()
 
     return (
             !cookies.get('name') && !cookies.get('accessToken') ?
@@ -29,24 +30,27 @@ const Profile = () => {
                         {cookies.get('name')}
                         <ArrowDropDownIcon style={{ marginTop: '4px' }} />
                     </StyledProfile>
-                    <AnimatePresence>
-                        {submenu && (
-                            <StyledUserMenu>
-                                <StyledSubmenu key='submenu' variants={variants} initial='hidden' animate='visible' exit='hidden'>
-                                    <Link href='/signin' passHref>
-                                        <StyledLink paddingLeft='40px' backgroundColor={Theme.colors.light} textColor={Theme.colors.dark}>My profile</StyledLink>
-                                    </Link>
-                                    <Link href='#' passHref>
-                                        <StyledLink onClick={e => {
-                                            e.stopPropagation()
-                                            setSubmenu(false)
-                                            logout()
-                                        }} paddingLeft='40px' backgroundColor={Theme.colors.light} textColor={Theme.colors.dark}>Log out</StyledLink>
-                                    </Link>
-                                </StyledSubmenu>
-                            </StyledUserMenu>
-                        )}
-                    </AnimatePresence>
+                    <>
+                        <AnimatePresence>
+                            {submenu && (
+                                <StyledUserMenu>
+                                    <StyledSubmenu key='submenu' variants={variants} initial='hidden' animate='visible' exit='hidden'>
+                                        <Link href='/signin' passHref>
+                                            <StyledLink paddingLeft='40px' backgroundColor={Theme.colors.light} textColor={Theme.colors.dark}>My profile</StyledLink>
+                                        </Link>
+                                        {loading ? <Loader light={true} /> : null}
+                                        <Link href='#' passHref>
+                                            <StyledLink onClick={e => {
+                                                e.stopPropagation()
+                                                setSubmenu(false)
+                                                logout()
+                                            }} paddingLeft='40px' backgroundColor={Theme.colors.light} textColor={Theme.colors.dark}>Log out</StyledLink>
+                                        </Link>
+                                    </StyledSubmenu>
+                                </StyledUserMenu>
+                            )}
+                        </AnimatePresence>
+                    </>
                 </>
     )
 }

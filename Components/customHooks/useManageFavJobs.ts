@@ -30,8 +30,22 @@ const useManageFavJobs = () => {
         add(offer)
     }
 
-    const removeJobFromDb = () => {
+    const remove = async (offer : Job) => {
+        dispatch({ type: RegisterActions.LOADING, errorMsg: '' })
+        try {
+            const { status, data } = await axios.delete(`/api/users/${cookies.get('_id')}/favjobs?job=${encodeURIComponent(offer.id)}`)
+            if (status === 500) throw new Error()
+            if (status === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: data })
+            dispatch({ type: RegisterActions.SUCCESS, errorMsg: '' })
+        }
+        catch {
+            dispatch({ type: RegisterActions.ERROR, errorMsg: RegisterActions.UNABLE_TO_ADD_JOB })
+        }
+    }
 
+    const removeJobFromDb = (offer : Job) => {
+        setJob(offer)
+        remove(offer)
     }
 
     return { addJobToDb, removeJobFromDb, state, job }
