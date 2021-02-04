@@ -5,6 +5,7 @@ export const StyledCredentials : StyledComponent<'div', any> = styled.div`
     background-color: ${({ theme }) => theme.colors.dark};
     padding: 20px;
     border-radius: 3px;
+    text-align: center;
 
     ${({ theme }) => theme.media.tablet} {
         width: 350px;

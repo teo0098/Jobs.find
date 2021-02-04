@@ -34,7 +34,8 @@ const Profile = () => {
                         <AnimatePresence>
                             {submenu && (
                                 <StyledUserMenu>
-                                    <StyledSubmenu key='submenu' variants={variants} initial='hidden' animate='visible' exit='hidden'>
+                                    <StyledSubmenu onClick={() => setSubmenu(false)} 
+                                    key='submenu' variants={variants} initial='hidden' animate='visible' exit='hidden'>
                                         <Link href='/dashboard' passHref>
                                             <StyledLink paddingLeft='40px' backgroundColor={Theme.colors.light} textColor={Theme.colors.dark}>My profile</StyledLink>
                                         </Link>

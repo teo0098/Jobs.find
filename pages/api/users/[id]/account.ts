@@ -40,7 +40,13 @@ const login = async (req : NextApiRequest, res : NextApiResponse) => {
                 })
                 if (user2 != null) return res.status(409).json(RegisterActions.EMAIL_EXISTS)
                 const accessToken = sign({ user: user._id }, `${process.env.ACCESS_TOKEN_SECRET}`, { expiresIn: '1d' })
-                const result = await collection.updateOne({ _id: user._id }, { $set: { name, surname, email, accessToken } })
+                const result = await collection.updateOne({ _id: user._id }, { $set: 
+                    { 
+                        name: name.trim().toLowerCase(), 
+                        surname: surname.trim().toLowerCase(), 
+                        email: email.trim(), 
+                        accessToken } 
+                    })
                 if (result.modifiedCount !== 1) throw new Error()
                 generateCookies(res, user.name, user._id, accessToken)
                 res.status(200).json('Data edited successfully')
@@ -73,7 +79,7 @@ const login = async (req : NextApiRequest, res : NextApiResponse) => {
         break
         case 'DELETE': {
             try {
-               
+               res.status(200).json('Account deleted successfully')
             }
             catch {
                 res.status(500).json(InfoTypes.SERVER_CRASH)

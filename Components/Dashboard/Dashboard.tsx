@@ -17,14 +17,17 @@ import Modal from "../Modal/Modal"
 import Info from "../Info/Info"
 import InfoTypes from "../Info/InfoTypes"
 import { StyledDiv } from "../Signup/styledSignup"
+import Theme from "../../styles/theme"
 
 const focusOnErrorDecorator = createDecorator()
+const focusOnErrorDecorator2 = createDecorator()
 
 const Dashboard : React.FC<DashboardProps> = ({ user }) => {
 
-    const { handleEditPersonalData, handleEditPassword, state: { loading, error, errorMsg, success }, edited } = useManageAccount()
+    const { handleEditPersonalData, handleEditPassword, state: { loading, error, errorMsg, success },
+            edited, capitalizeText, deleteAccount } = useManageAccount()
 
-    const renderStatus = (info : string) => {
+    const renderStatus = (info : string | undefined) => {
         if (loading) return (
             <StyledDiv>
                 <Loader light={true} />
@@ -39,7 +42,7 @@ const Dashboard : React.FC<DashboardProps> = ({ user }) => {
                 </StyledDiv>
             </Modal>
         )
-        else if (success) return (
+        else if (success && info) return (
             <Modal>
                 <StyledDiv>
                     <Info state={InfoTypes.SUCCESS}>
@@ -57,8 +60,8 @@ const Dashboard : React.FC<DashboardProps> = ({ user }) => {
                 {({ handleSubmit }) =>
                     <StyledForm onSubmit={handleSubmit}>
                         <StyledInputsContainer>
-                            <Name defaultValue={user?.name} />
-                            <Surname defaultValue={user?.surname} />
+                            <Name defaultValue={capitalizeText(user?.name as string)} />
+                            <Surname defaultValue={capitalizeText(user?.surname as string)} />
                             <Email defaultValue={user?.email} />
                         </StyledInputsContainer>
                         {edited === 0 ? renderStatus('Your data has been edited successfully') : null}
@@ -66,7 +69,7 @@ const Dashboard : React.FC<DashboardProps> = ({ user }) => {
                     </StyledForm>
                 }
             </Form>
-            <Form onSubmit={handleEditPassword} validate={validateRepeatPassword} decorators={[focusOnErrorDecorator]}>
+            <Form onSubmit={handleEditPassword} validate={validateRepeatPassword} decorators={[focusOnErrorDecorator2]}>
                 {({ handleSubmit }) =>
                     <StyledForm marginTop='40px' onSubmit={handleSubmit}>
                         <StyledInputsContainer>
@@ -78,6 +81,8 @@ const Dashboard : React.FC<DashboardProps> = ({ user }) => {
                     </StyledForm>
                 }
             </Form>
+            <StyledButton onClick={deleteAccount} color={Theme.colors.error} offsetTop="40px" width="100%" fontSize="16px">Delete account</StyledButton>
+            {edited === 2 ? renderStatus(undefined) : null}
         </StyledCredentials>
     )
 }

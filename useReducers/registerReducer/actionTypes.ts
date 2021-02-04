@@ -10,7 +10,8 @@ enum RegisterActions {
     UNABLE_TO_REMOVE_JOB = 'Unable to remove this job from a cloud... Please attempt once again later',
     JOB_EXISTS = 'This job has been already added',
     UNABLE_TO_EDIT = 'Unable to edit your data... Please attempt once again later',
-    UNABLE_TO_EDIT_PASSWORD = 'Unable to edit your password... Please attempt once again later'
+    UNABLE_TO_EDIT_PASSWORD = 'Unable to edit your password... Please attempt once again later',
+    UNABLE_TO_DELETE_ACCOUNT = 'Unable to delete your account... Please attempt once again later'
 }
 
 export default RegisterActions
