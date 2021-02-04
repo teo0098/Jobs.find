@@ -1,4 +1,4 @@
-import { useReducer } from 'react'
+import { useReducer, useState } from 'react'
 import { useRouter } from 'next/router'
 
 import axios from '../../axiosInstance'
@@ -8,6 +8,7 @@ import RegisterActions from '../../useReducers/registerReducer/actionTypes'
 const useLogout = () => {
 
     const [state, dispatch] = useReducer(reducer, initialState)
+    const [submenu, setSubmenu] = useState<boolean>(false)
     const { push } = useRouter()
 
     const logout = async () => {
@@ -16,14 +17,15 @@ const useLogout = () => {
             const { status } = await axios.get('/api/logout')
             if (status === 500) throw new Error()
             dispatch({ type: RegisterActions.SUCCESS, errorMsg: '' })
+            setSubmenu(false)
             push('/signin')
         }
         catch {
-            dispatch({ type: RegisterActions.ERROR, errorMsg: RegisterActions.UNABLE_TO_LOGIN })
+            dispatch({ type: RegisterActions.ERROR, errorMsg: '' })
         }
     }
 
-    return { logout, state }
+    return { logout, state, submenu, setSubmenu }
 }
 
 export default useLogout

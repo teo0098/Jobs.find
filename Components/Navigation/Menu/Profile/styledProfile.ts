@@ -27,7 +27,8 @@ export const StyledProfile : StyledComponent<"div", any> = styled.div`
 export const StyledSubmenu = styled(motion.nav)`
     display: flex;
     flex-direction: column;
-    padding: 0 5px;
+    padding: 0 5px 5px 5px;
+    background-color: ${({ theme }) => theme.colors.dark};
 
     ${({ theme }) => theme.media.tablet} {
         position: absolute;

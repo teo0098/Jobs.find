@@ -34,7 +34,7 @@ const JobPage : React.FC<JobPageProps> = ({ job, isFallback, addJob, jobs, remov
                     <SC.StyledInfo resp>
                         <SC.StyledImg src={`${job.jobData.company_logo ? job.jobData.company_logo : ''}`} alt='Company logo' />
                         <section>
-                            <h2 id='jobTitle'> {job.jobData.title} </h2>
+                            <SC.StyledH2 id='jobTitle'> {job.jobData.title} </SC.StyledH2>
                             <SC.StyledP> Company: <SC.StyledA rel="noopener nofollow" target="_blank" href={`${job.jobData.company_url}`}> {job.jobData.company} </SC.StyledA></SC.StyledP>
                             <SC.StyledP> Type: <SC.StyledSpan>{job.jobData.type}</SC.StyledSpan></SC.StyledP>
                             <SC.StyledP> Location: <SC.StyledSpan>{job.jobData.location}</SC.StyledSpan></SC.StyledP>

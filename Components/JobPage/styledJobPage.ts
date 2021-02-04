@@ -135,3 +135,7 @@ export const StyledError : StyledComponent<"div", any> = styled.div`
         padding: 50px 20px;
     }
 `
+
+export const StyledH2 : StyledComponent<"h2", any> = styled.h2`
+    word-break: break-word;
+`

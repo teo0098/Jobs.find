@@ -39,7 +39,7 @@ const useManageFavJobs = () => {
             dispatch({ type: RegisterActions.SUCCESS, errorMsg: '' })
         }
         catch {
-            dispatch({ type: RegisterActions.ERROR, errorMsg: RegisterActions.UNABLE_TO_ADD_JOB })
+            dispatch({ type: RegisterActions.ERROR, errorMsg: RegisterActions.UNABLE_TO_REMOVE_JOB })
         }
     }
 

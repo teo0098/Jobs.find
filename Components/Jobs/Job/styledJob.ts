@@ -75,13 +75,14 @@ export const StyledDiv : StyledComponent<"div", any> = styled.div`
 
 export const StyledH4 : StyledComponent<"h4", any> = styled.h4`
     color: ${({ theme }) => theme.colors.dark};
+    word-break: break-word;
 
     ${({ theme }) => theme.media.tablet} {
-        width: 300px;
+        width: 400px;
         margin-right: 10px;
     }
 
     ${({ theme }) => theme.media.desktop} {
-        width: 400px;
+        width: 500px;
     }
 `
