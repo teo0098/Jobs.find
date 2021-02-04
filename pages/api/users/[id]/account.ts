@@ -1,34 +1,70 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { sign } from 'jsonwebtoken'
 import { ObjectID } from 'mongodb'
+import { hash } from 'bcryptjs'
 
-import generateCookies from '../../../../utils/middlewares/generateCookies'
-import { Job } from '../../../../types/Job'
 import getUserID from '../../../../utils/middlewares/getUserID'
-import findUser from '../../../../utils/middlewares/findUser'
 import getCollection from '../../../../utils/middlewares/getCollection'
-import RegisterActions from '../../../../useReducers/registerReducer/actionTypes'
+import findUser from '../../../../utils/middlewares/findUser'
+import generateCookies from '../../../../utils/middlewares/generateCookies'
+import validateData from '../../../../utils/middlewares/validateData'
+import validatePassword from '../../../../utils/middlewares/validatePassword'
 import InfoTypes from '../../../../utils/info/InfoTypes'
+import RegisterActions from '../../../../useReducers/registerReducer/actionTypes'
 
-const favJobs = async (req : NextApiRequest, res : NextApiResponse) => {
+type PassedBody = {name : string, surname : string, email : string}
+type PassedBodyPassword = {password : string, rpassword : string}
+
+const login = async (req : NextApiRequest, res : NextApiResponse) => {
     const { query, body, method, cookies } = req
 
     switch (method) {
-        case 'POST': {
+        case 'PUT': {
             try {
+                const { name, surname, email } : PassedBody = body
+                if (!validateData(name, surname, email)) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 const _id : number | ObjectID = getUserID(query, cookies['accessToken'])
                 if (_id === 403) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 const collection = await getCollection()
                 let user : any = await findUser(collection, (_id as ObjectID), cookies['accessToken'])
                 if (user === 403) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
-                const jobExists = user.favJobs.find((j : Job) => j.id === body.id)
-                if (jobExists !== undefined) return res.status(409).json(RegisterActions.JOB_EXISTS)
-                const favJobs : Array<Job> = [...user.favJobs, body]
+                const user2 = await collection.findOne({
+                    '$and': [
+                        {
+                            'email': email
+                        },
+                        {
+                            '_id': { '$ne': _id }
+                        }
+                    ]
+                })
+                if (user2 != null) return res.status(409).json(RegisterActions.EMAIL_EXISTS)
                 const accessToken = sign({ user: user._id }, `${process.env.ACCESS_TOKEN_SECRET}`, { expiresIn: '1d' })
-                const result = await collection.updateOne({ _id }, { $set: { favJobs, accessToken } })
+                const result = await collection.updateOne({ _id: user._id }, { $set: { name, surname, email, accessToken } })
                 if (result.modifiedCount !== 1) throw new Error()
                 generateCookies(res, user.name, user._id, accessToken)
-                res.status(201).json('Job added successfully')
+                res.status(200).json('Data edited successfully')
+            }
+            catch {
+                res.status(500).json(InfoTypes.SERVER_CRASH)
+            }
+        }
+        break
+        case 'PATCH': {
+            try {
+                const { password, rpassword } : PassedBodyPassword = body
+                if (!validatePassword(password, rpassword)) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
+                const _id : number | ObjectID = getUserID(query, cookies['accessToken'])
+                if (_id === 403) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
+                const collection = await getCollection()
+                let user : any = await findUser(collection, (_id as ObjectID), cookies['accessToken'])
+                if (user === 403) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
+                const hashedPassword = await hash(password, 10)
+                const accessToken = sign({ user: user._id }, `${process.env.ACCESS_TOKEN_SECRET}`, { expiresIn: '1d' })
+                const result = await collection.updateOne({ _id }, { $set: { password: hashedPassword, accessToken } })
+                if (result.modifiedCount !== 1) throw new Error()
+                generateCookies(res, user.name, user._id, accessToken)
+                res.status(200).json('Password edited successfully')
             }
             catch {
                 res.status(500).json(InfoTypes.SERVER_CRASH)
@@ -37,17 +73,7 @@ const favJobs = async (req : NextApiRequest, res : NextApiResponse) => {
         break
         case 'DELETE': {
             try {
-                const _id : number | ObjectID = getUserID(query, cookies['accessToken'])
-                if (_id === 403) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
-                const collection = await getCollection()
-                let user : any = await findUser(collection, (_id as ObjectID), cookies['accessToken'])
-                if (user === 403) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
-                const favJobs : Array<Job> = (user.favJobs as Array<Job>).filter(j => j.id !== query.job)
-                const accessToken = sign({ user: user._id }, `${process.env.ACCESS_TOKEN_SECRET}`, { expiresIn: '1d' })
-                const result = await collection.updateOne({ _id }, { $set: { favJobs, accessToken } })
-                if (result.modifiedCount !== 1) throw new Error()
-                generateCookies(res, user.name, user._id, accessToken)
-                res.status(200).json('Job deleted successfully')
+               
             }
             catch {
                 res.status(500).json(InfoTypes.SERVER_CRASH)
@@ -55,10 +81,10 @@ const favJobs = async (req : NextApiRequest, res : NextApiResponse) => {
         }
         break
         default: {
-            res.setHeader('Allow', ['POST', 'DELETE'])
+            res.setHeader('Allow', ['PUT', 'PATCH', 'DELETE'])
             res.status(405).end(`Method ${method} Not Allowed`)
         }
     }
 }
-
-export default favJobs
+  
+export default login

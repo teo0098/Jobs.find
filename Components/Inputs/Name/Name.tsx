@@ -3,6 +3,7 @@ import { Field } from 'react-final-form'
 
 import Info from '../../Info/Info'
 import InfoTypes from '../../Info/InfoTypes'
+import InputProps from '../inputsProps'
 
 const validateName = (name : string) => {
     if (!name) return 'Field is required';
@@ -12,8 +13,8 @@ const validateName = (name : string) => {
     return undefined
 }
 
-const Name : React.FC = () => (
-    <Field name='name' component='input' validate={validateName}>
+const Name : React.FC<InputProps> = ({ defaultValue }) => (
+    <Field defaultValue={defaultValue} name='name' component='input' validate={validateName}>
         {({ input, meta }) =>
             <div>
                 <TextField style={{ width: '100%' }} {...input} label="Name" variant="filled" />

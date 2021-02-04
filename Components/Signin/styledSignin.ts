@@ -10,6 +10,11 @@ export const StyledInputsContainer : StyledComponent<'div', any> = styled.div`
     }
 `
 
-export const StyledForm : StyledComponent<'form', any> = styled.form`
+interface StyledFormProps {
+    marginTop ?: string;
+}
+
+export const StyledForm : StyledComponent<'form', any, StyledFormProps> = styled.form<StyledFormProps>`
     text-align: center;
+    margin-top: ${({ marginTop }) => marginTop ? marginTop : 'none'};
 `

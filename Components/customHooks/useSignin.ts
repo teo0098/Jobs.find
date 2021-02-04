@@ -10,7 +10,7 @@ const useSignin = () => {
     const [state, dispatch] = useReducer(reducer, initialState)
     const { push } = useRouter()
 
-    const handleOnSubmit = async (values : any) => {
+    const handleOnSubmit = async (values : {}) => {
         dispatch({ type: RegisterActions.LOADING, errorMsg: '' })
         try {
             const { data, status } = await axios.post('/api/login', values)

@@ -35,7 +35,7 @@ const Profile = () => {
                             {submenu && (
                                 <StyledUserMenu>
                                     <StyledSubmenu key='submenu' variants={variants} initial='hidden' animate='visible' exit='hidden'>
-                                        <Link href='/signin' passHref>
+                                        <Link href='/dashboard' passHref>
                                             <StyledLink paddingLeft='40px' backgroundColor={Theme.colors.light} textColor={Theme.colors.dark}>My profile</StyledLink>
                                         </Link>
                                         {loading ? <Loader light={true} /> : null}

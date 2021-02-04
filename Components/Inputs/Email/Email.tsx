@@ -4,6 +4,7 @@ import validator from 'validator'
 
 import Info from '../../Info/Info'
 import InfoTypes from '../../Info/InfoTypes'
+import InputProps from '../inputsProps'
 
 export const validateEmail = (email : string) => {
     if (!email) return 'Field is required'
@@ -11,8 +12,8 @@ export const validateEmail = (email : string) => {
     return undefined
 }
 
-const Email : React.FC = () => (
-    <Field name='email' component='input' validate={validateEmail}>
+const Email : React.FC<InputProps> = ({ defaultValue }) => (
+    <Field defaultValue={defaultValue} name='email' component='input' validate={validateEmail}>
         {({ input, meta }) =>
             <div id='emailField'>
                 <TextField style={{ width: '100%' }} {...input} label="Email" variant="filled" />

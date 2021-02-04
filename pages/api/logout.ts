@@ -5,6 +5,7 @@ import { ObjectID } from 'mongodb'
 
 import { connectToDatabase } from '../../utils/mongodb'
 import VerifyToken from '../../utils/interfaces/token'
+import InfoTypes from '../../utils/info/InfoTypes'
 
 const login = async (req : NextApiRequest, res : NextApiResponse) => {
     const { accessToken } = req.cookies
@@ -34,10 +35,10 @@ const login = async (req : NextApiRequest, res : NextApiResponse) => {
                 maxAge: 0
             })
         ])
-        res.status(200).json('Logged out successfully')
+        res.status(200).end()
     }
     catch {
-        res.status(500).json('Server crashed')
+        res.status(500).json(InfoTypes.SERVER_CRASH)
     }  
 }
   

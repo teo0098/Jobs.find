@@ -1,21 +1,19 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import validator from 'validator'
 import { hash } from 'bcryptjs'
 
 import { connectToDatabase } from '../../utils/mongodb'
-
 import RegisterActions from '../../useReducers/registerReducer/actionTypes'
+import validateData from '../../utils/middlewares/validateData'
+import validatePassword from '../../utils/middlewares/validatePassword'
+import InfoTypes from '../../utils/info/InfoTypes'
 
 type PassedBody = {name : string, surname : string, email : string, password : string, rpassword : string, adult : boolean}
 
 const registerUser = async (req : NextApiRequest, res : NextApiResponse) => {
     const { name, surname, email, password, rpassword } : PassedBody = req.body
     try {
-        if (!/^[A-Za-z\s]{2,20}$/.test(name) || name.trim().length === 0) throw new Error()
-        if (!/^[A-Za-z\s]{2,30}$/.test(surname) || surname.trim().length === 0) throw new Error()
-        if (!email || !validator.isEmail(email)) throw new Error()
-        if (!/^[A-Za-z0-9!@#$_-]{8,30}$/.test(password)) throw new Error()
-        if (rpassword !== password) throw new Error()
+        if (!validateData(name, surname, email)) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
+        if (!validatePassword(password, rpassword)) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
         const { db } = await connectToDatabase()
         const collection = db.collection('users')
         const userNumbers : number = await collection.countDocuments({ email })
@@ -31,10 +29,10 @@ const registerUser = async (req : NextApiRequest, res : NextApiResponse) => {
         }
         const result = await collection.insertOne(user);
         if (result.insertedCount !== 1) throw new Error()
-        res.status(201).json('Created successfully')
+        res.status(201).json('Account created successfully')
     }
     catch {
-        res.status(500).json('Server crashed')
+        res.status(500).json(InfoTypes.SERVER_CRASH)
     }
 }
 

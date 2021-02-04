@@ -10,11 +10,12 @@ const useSignup : Function = () => {
 
     const [state, dispatch] = useReducer(reducer, initialState)
 
-    const handleOnSubmit = async (values : any) => {
+    const handleOnSubmit = async (values : {}) => {
         dispatch({ type: RegisterActions.LOADING, errorMsg: '' })
         try {
             const { data, status } = await axios.post('/api/account', values)
             if (!data || status === 500) throw new Error()
+            if (status === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: data })
             if (data === RegisterActions.EMAIL_EXISTS || status === 409) return dispatch({ type: RegisterActions.ERROR, errorMsg: RegisterActions.EMAIL_IN_USE })
             dispatch({ type: RegisterActions.SUCCESS, errorMsg: '' })
         }
