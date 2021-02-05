@@ -1,5 +1,5 @@
 import { AnimatePresence } from 'framer-motion'
-import { useState } from 'react'
+import { useState, memo } from 'react'
 
 import Logo from './Logo/Logo'
 import { StyledNavigation, StyledMenuContainer, StyledTabletMenu, StyledMobileOptions } from './styledNavigation'
@@ -37,4 +37,4 @@ const Navigation : React.FC = () => {
     )
 }
 
-export default Navigation
+export default memo(Navigation)

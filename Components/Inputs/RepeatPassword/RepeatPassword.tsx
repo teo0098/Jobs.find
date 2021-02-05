@@ -1,5 +1,6 @@
 import TextField from '@material-ui/core/TextField'
 import { Field } from 'react-final-form'
+import { memo } from 'react'
 
 import Info from '../../Info/Info'
 import InfoTypes from '../../Info/InfoTypes'
@@ -15,4 +16,4 @@ const RepeatPassword : React.FC = () => (
     </Field>
 )
 
-export default RepeatPassword
+export default memo(RepeatPassword)

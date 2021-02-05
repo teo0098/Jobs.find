@@ -1,9 +1,9 @@
 import { Job } from "../../types/Job"
 
 type Function = (jobs : Array<Job>, job : Job) => boolean
-type useJob = () => { isJobInFavourite : Function }
+type useJobType = () => { isJobInFavourite : Function }
 
-const useJob : useJob = () => {
+const useJob : useJobType = () => {
 
     const isJobInFavourite : Function = (jobs : Array<Job>, job : Job) => {
         const jobExists = jobs.find(j => j.id === job.id)

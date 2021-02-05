@@ -6,7 +6,7 @@ const withRedirect = (Component : React.FC) => {
     return (props : {}) => {
         const { back } = useRouter()
 
-        if (cookies.get('name') || cookies.get('accessToken')) {
+        if (cookies.get('name')) {
             back()
             return null
         }

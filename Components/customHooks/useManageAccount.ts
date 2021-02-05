@@ -42,7 +42,7 @@ const useManageAccount = () => {
         }
     }
 
-    const deleteAccount = async () => {
+    const handleDeleteAccount = async () => {
         setEdited(2)
         dispatch({ type: RegisterActions.LOADING, errorMsg: '' })
         try {
@@ -59,7 +59,7 @@ const useManageAccount = () => {
 
     const capitalizeText = (text : string) => text.split(' ').map(str => str.charAt(0).toUpperCase() + str.slice(1)).join(' ')
 
-    return { handleEditPersonalData, handleEditPassword, state, edited, capitalizeText, deleteAccount }
+    return { handleEditPersonalData, handleEditPassword, state, edited, capitalizeText, handleDeleteAccount }
 }
 
 export default useManageAccount

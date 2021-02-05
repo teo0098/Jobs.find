@@ -1,5 +1,6 @@
 import TextField from '@material-ui/core/TextField'
 import { Field } from 'react-final-form'
+import { memo } from 'react'
 
 import Info from '../../Info/Info'
 import InfoTypes from '../../Info/InfoTypes'
@@ -24,4 +25,4 @@ const Name : React.FC<InputProps> = ({ defaultValue }) => (
     </Field>
 )
 
-export default Name
+export default memo(Name)

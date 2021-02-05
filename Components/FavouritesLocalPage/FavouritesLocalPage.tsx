@@ -61,7 +61,7 @@ const FavouritesLocalPage : React.FC<FavouritesLocalPageProps> = ({ amount, jobs
                         <StyledButton onClick={() => removeJob(jobs, job)} color={Theme.colors.error} offsetTop='5px' width='100%' fontSize='15px'>
                             <DeleteForeverIcon />
                         </StyledButton>
-                        {cookies.get('name') || cookies.get('refreshToken') ?
+                        {cookies.get('name') ?
                             <>
                                 <StyledButton disabled={loading} onClick={() => addJobToDb(job)} offsetTop='5px' width='100%' fontSize='15px'>
                                     Add to cloud

@@ -1,6 +1,7 @@
 import TextField from '@material-ui/core/TextField'
 import { Field } from 'react-final-form'
 import validator from 'validator'
+import { memo } from 'react'
 
 import Info from '../../Info/Info'
 import InfoTypes from '../../Info/InfoTypes'
@@ -23,4 +24,4 @@ const Email : React.FC<InputProps> = ({ defaultValue }) => (
     </Field>
 )
 
-export default Email
+export default memo(Email)

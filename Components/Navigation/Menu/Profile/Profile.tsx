@@ -3,7 +3,6 @@ import Link from 'next/link'
 import cookies from 'js-cookie'
 import { AnimatePresence } from 'framer-motion'
 
-
 import Theme from '../../../../styles/theme';
 import { StyledProfile, StyledSubmenu, StyledUserMenu } from './styledProfile'
 import { StyledLink } from '../styledMenu'
@@ -17,7 +16,7 @@ const Profile = () => {
     const { logout, state: { loading }, submenu, setSubmenu } = useLogout()
 
     return (
-            !cookies.get('name') && !cookies.get('accessToken') ?
+            !cookies.get('name') ?
                 <Link href='/signin' passHref>
                     <StyledLink>Log in</StyledLink>
                 </Link>

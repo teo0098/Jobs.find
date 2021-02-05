@@ -1,6 +1,7 @@
 import { Field } from 'react-final-form'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
+import { memo } from 'react'
 
 import Info from '../../Info/Info'
 import InfoTypes from '../../Info/InfoTypes'
@@ -23,4 +24,4 @@ const Adult : React.FC = () => (
     </Field>
 )
 
-export default Adult
+export default memo(Adult)

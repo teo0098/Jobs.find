@@ -25,7 +25,7 @@ const focusOnErrorDecorator2 = createDecorator()
 const Dashboard : React.FC<DashboardProps> = ({ user }) => {
 
     const { handleEditPersonalData, handleEditPassword, state: { loading, error, errorMsg, success },
-            edited, capitalizeText, deleteAccount } = useManageAccount()
+            edited, capitalizeText, handleDeleteAccount } = useManageAccount()
 
     const renderStatus = (info : string | undefined) => {
         if (loading) return (
@@ -81,7 +81,7 @@ const Dashboard : React.FC<DashboardProps> = ({ user }) => {
                     </StyledForm>
                 }
             </Form>
-            <StyledButton onClick={deleteAccount} color={Theme.colors.error} offsetTop="40px" width="100%" fontSize="16px">Delete account</StyledButton>
+            <StyledButton onClick={handleDeleteAccount} color={Theme.colors.error} offsetTop="40px" width="100%" fontSize="16px">Delete account</StyledButton>
             {edited === 2 ? renderStatus(undefined) : null}
         </StyledCredentials>
     )
