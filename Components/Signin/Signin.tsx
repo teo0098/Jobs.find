@@ -1,5 +1,6 @@
 import { Form } from 'react-final-form'
 import createDecorator from 'final-form-focus'
+import cookies from 'js-cookie'
 
 import useSignin from '../customHooks/useSignin'
 import { StyledButton } from '../SearchEngine/styledSearchEngine'
@@ -19,23 +20,32 @@ const Signin : React.FC = () => {
     const { handleOnSubmit, state: { error, errorMsg, loading } } = useSignin()
 
     return (
-        <Form onSubmit={handleOnSubmit} decorators={[focusOnErrorDecorator]}>
-            {({ handleSubmit }) => 
-                <StyledForm onSubmit={handleSubmit}>
-                    <StyledInputsContainer>
-                        <EmailInput />
-                        <PasswordInput />
-                    </StyledInputsContainer>
-                    {loading ? <StyledDiv> <Loader light /> </StyledDiv> : null}
-                    {error ? <Modal>
-                        <StyledDiv>
-                            <Info state={InfoTypes.ERROR}> {errorMsg} </Info>
-                        </StyledDiv>
-                    </Modal> : null}
-                    <StyledButton offsetTop="20px" width="100%" fontSize="16px" type="submit">Sign in</StyledButton>
-                </StyledForm>
+        <>
+            {!cookies.get('accountDeleted') ? null :
+                <Modal>
+                    <StyledDiv marginBottom='20px'>
+                        <Info state={InfoTypes.SUCCESS}> Account has been deleted successfully </Info>
+                    </StyledDiv>
+                </Modal>
             }
-        </Form>
+            <Form onSubmit={handleOnSubmit} decorators={[focusOnErrorDecorator]}>
+                {({ handleSubmit }) => 
+                    <StyledForm onSubmit={handleSubmit}>
+                        <StyledInputsContainer>
+                            <EmailInput />
+                            <PasswordInput />
+                        </StyledInputsContainer>
+                        {loading ? <StyledDiv> <Loader light /> </StyledDiv> : null}
+                        {error ? <Modal>
+                            <StyledDiv>
+                                <Info state={InfoTypes.ERROR}> {errorMsg} </Info>
+                            </StyledDiv>
+                        </Modal> : null}
+                        <StyledButton offsetTop="20px" width="100%" fontSize="16px" type="submit">Sign in</StyledButton>
+                    </StyledForm>
+                }
+            </Form>
+        </>
     )
 }
 

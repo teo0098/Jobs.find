@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { sign } from 'jsonwebtoken'
 import { ObjectID } from 'mongodb'
 import { hash } from 'bcryptjs'
+import { serialize } from 'cookie'
 
 import getUserID from '../../../../utils/middlewares/getUserID'
 import getCollection from '../../../../utils/middlewares/getCollection'
@@ -79,7 +80,36 @@ const login = async (req : NextApiRequest, res : NextApiResponse) => {
         break
         case 'DELETE': {
             try {
-               res.status(200).json('Account deleted successfully')
+                const _id : number | ObjectID = getUserID(query, cookies['accessToken'])
+                if (_id === 403) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
+                const collection = await getCollection()
+                let user : any = await findUser(collection, (_id as ObjectID), cookies['accessToken'])
+                if (user === 403) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
+                const result = await collection.deleteOne({ _id })
+                if (result.deletedCount !== 1) throw new Error()
+                res.setHeader('Set-Cookie', [
+                    serialize('name', '', {
+                        path: '/',
+                        sameSite: 'strict',
+                        maxAge: 0
+                    }),
+                    serialize('_id', '', {
+                        path: '/',
+                        sameSite: 'strict',
+                        maxAge: 0
+                    }),
+                    serialize('accessToken', '', {
+                        path: '/',
+                        sameSite: 'strict',
+                        maxAge: 0
+                    }),
+                    serialize('accountDeleted', 'yes', {
+                        path: '/',
+                        sameSite: 'strict',
+                        maxAge: 5
+                    })
+                ])
+                res.status(200).json('Account deleted successfully')
             }
             catch {
                 res.status(500).json(InfoTypes.SERVER_CRASH)
