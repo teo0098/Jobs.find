@@ -24,6 +24,9 @@ const App : AppType = ({ Component, pageProps }) => {
   useEffect(() => {
     const jssStyles = document.querySelector('#jss-server-side');
     if (jssStyles) jssStyles.parentElement?.removeChild(jssStyles);
+    if (cookies.get('_id')) {
+      axios.get(`/api/users/${cookies.get('_id')}/account`)
+    }
     setInterval(() => {
       if (cookies.get('_id')) {
         axios.get(`/api/users/${cookies.get('_id')}/account`)

@@ -5,6 +5,8 @@ import { StyledButton } from '../SearchEngine/styledSearchEngine'
 interface StyledJobsProps { paddingTop ?: string; }
 
 export const StyledJobs : StyledComponent<"div", any, StyledJobsProps> = styled.div<StyledJobsProps>`
+    padding-bottom: 20px;
+
     ${({ theme }) => theme.media.desktop} {
         display: flex;
         flex-direction: column;
@@ -22,12 +24,12 @@ export const StyledError : StyledComponent<"div", any> = styled.div`
 `
 
 export const StyledMoreButton = styled(StyledButton)`
-    margin: 20px auto;
+    margin: 20px auto 0 auto;
     display: block;
 `
 
 export const StyledLoader : StyledComponent<"div", any> = styled.div`
-    margin: 20px 0;
+    margin: 20px 0 0 0;
     display: flex;
     justify-content: center;
 `
