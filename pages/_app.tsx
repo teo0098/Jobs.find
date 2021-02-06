@@ -5,7 +5,9 @@ import { createStore, Store } from 'redux'
 import { Provider } from 'react-redux'
 import { persistStore } from 'redux-persist'
 import { PersistGate } from 'redux-persist/integration/react'
+import cookies from 'js-cookie'
 
+import axios from '../axiosInstance'
 import GlobalStyles from '../styles/global'
 import Layout from '../Components/Layout/Layout'
 import Theme from '../styles/theme'
@@ -22,6 +24,11 @@ const App : AppType = ({ Component, pageProps }) => {
   useEffect(() => {
     const jssStyles = document.querySelector('#jss-server-side');
     if (jssStyles) jssStyles.parentElement?.removeChild(jssStyles);
+    setInterval(() => {
+      if (cookies.get('_id')) {
+        axios.get(`/api/users/${cookies.get('_id')}/account`)
+      }
+    }, 300000)
   }, []);
 
   return (

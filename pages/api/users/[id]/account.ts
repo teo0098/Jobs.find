@@ -20,11 +20,27 @@ const login = async (req : NextApiRequest, res : NextApiResponse) => {
     const { query, body, method, cookies } = req
 
     switch (method) {
+        case 'GET': {
+            try {
+                const user : any = await authUser(cookies, { _id: 1, name: 1, accessToken: 1 }, query)
+                if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
+                const collection = await getCollection()
+                const accessToken = sign({ user: user._id }, `${process.env.ACCESS_TOKEN_SECRET}`, { expiresIn: '1d' })
+                const result = await collection.updateOne({ _id: new ObjectID(user._id) }, { $set: { accessToken } })
+                if (result.modifiedCount !== 1) throw new Error()
+                generateCookies(res, user.name, user._id, accessToken)
+                res.status(200).json('Authorized successfully')
+            }
+            catch {
+                res.status(500).json(InfoTypes.SERVER_CRASH)
+            }
+        }
+        break
         case 'PUT': {
             try {
                 const { name, surname, email } : PassedBody = body
                 if (!validateData(name, surname, email)) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
-                const user : any = await authUser(cookies, query)
+                const user : any = await authUser(cookies, { _id: 1, name: 1, accessToken: 1 }, query)
                 if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 const collection = await getCollection()
                 const user2 = await collection.findOne({
@@ -59,7 +75,7 @@ const login = async (req : NextApiRequest, res : NextApiResponse) => {
             try {
                 const { password, rpassword } : PassedBodyPassword = body
                 if (!validatePassword(password, rpassword)) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
-                const user : any = await authUser(cookies, query)
+                const user : any = await authUser(cookies, { _id: 1, name: 1, accessToken: 1 }, query)
                 if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 const hashedPassword = await hash(password, 10)
                 const accessToken = sign({ user: user._id }, `${process.env.ACCESS_TOKEN_SECRET}`, { expiresIn: '1d' })
@@ -75,7 +91,7 @@ const login = async (req : NextApiRequest, res : NextApiResponse) => {
         break
         case 'DELETE': {
             try {
-                const user : any = await authUser(cookies, query)
+                const user : any = await authUser(cookies, { _id: 1, accessToken: 1 }, query)
                 if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 const collection = await getCollection()
                 const result = await collection.deleteOne({ _id: new ObjectID(user._id) })
@@ -110,7 +126,7 @@ const login = async (req : NextApiRequest, res : NextApiResponse) => {
         }
         break
         default: {
-            res.setHeader('Allow', ['PUT', 'PATCH', 'DELETE'])
+            res.setHeader('Allow', ['PUT', 'PATCH', 'DELETE', 'GET'])
             res.status(405).end(`Method ${method} Not Allowed`)
         }
     }

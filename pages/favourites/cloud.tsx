@@ -23,7 +23,7 @@ export const getServerSideProps : GetServerSideProps = async ({ req }) => {
 
     try {
         let cookies : null | { [key : string] : string } = parseCookies(req.headers.cookie)
-        const user = await authUser(cookies)
+        const user = await authUser(cookies, { accessToken: 1, favJobs: 1 })
         if (!user) throw new Error()
         favJobs = user.favJobs
     }   
