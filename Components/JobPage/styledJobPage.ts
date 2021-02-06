@@ -90,14 +90,11 @@ interface StyledDivProps {
 }
 
 export const StyledDiv : StyledComponent<"div", any, StyledDivProps> = styled.div<StyledDivProps>`
-    padding-bottom: ${({ grid }) => !grid ? '20px' : null};
-
     ${({ theme }) => theme.media.desktop} {
         display: grid;
         grid-template-columns: ${({ grid }) => grid ? `68% 28%` : null};
         justify-content: ${({ grid }) => grid ? 'space-between' : null};
         align-items: ${({ grid }) => grid ? 'flex-start' : null};
-        width: 90%;
         margin: 0 auto;
         padding-top: 50px;
 
@@ -106,11 +103,6 @@ export const StyledDiv : StyledComponent<"div", any, StyledDivProps> = styled.di
             border-bottom: none;
             border-radius: 3px;
             padding-top: ${({ grid }) => !grid ? 'unset' : null};
-            padding-bottom: ${({ grid }) => !grid ? '30px' : null};
-        }
-
-        & > * > * {
-            width: ${({ grid }) => !grid ? '100%' : null};
         }
     }
 

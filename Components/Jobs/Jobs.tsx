@@ -8,7 +8,7 @@ import useJobs from '../customHooks/useJobs'
 import Loader from '../Loader/Loader'
 import Modal from '../Modal/Modal'
 
-const Jobs : React.FC<JobsProps> = ({ jobs }) => {
+const Jobs : React.FC<JobsProps> = ({ jobs, jobWidth, paddingTop }) => {
 
     const { getMoreJobs, state: { error, loading, offers, offersQuantity }, query } = useJobs(jobs)
 
@@ -20,11 +20,11 @@ const Jobs : React.FC<JobsProps> = ({ jobs }) => {
     )
 
     return (
-        <StyledJobs id='jobs'>
+        <StyledJobs paddingTop={paddingTop} id='jobs'>
             {jobs ?
                 <>
                     {offers.map(({ title, id, company_logo, company, location, created_at }, index : number) => (
-                        <Job index={index} key={id} title={title} id={id} company_logo={company_logo} company={company} location={location} created_at={created_at} />
+                        <Job width={jobWidth} index={index} key={id} title={title} id={id} company_logo={company_logo} company={company} location={location} created_at={created_at} />
                     ))}
                     {error ?
                         <Modal>

@@ -1,17 +1,17 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { sign } from 'jsonwebtoken'
-import { ObjectID } from 'mongodb'
 import { hash } from 'bcryptjs'
 import { serialize } from 'cookie'
+import { ObjectID } from 'mongodb'
 
-import getUserID from '../../../../utils/middlewares/getUserID'
 import getCollection from '../../../../utils/middlewares/getCollection'
-import findUser from '../../../../utils/middlewares/findUser'
 import generateCookies from '../../../../utils/middlewares/generateCookies'
 import validateData from '../../../../utils/middlewares/validateData'
 import validatePassword from '../../../../utils/middlewares/validatePassword'
 import InfoTypes from '../../../../utils/info/InfoTypes'
 import RegisterActions from '../../../../useReducers/registerReducer/actionTypes'
+import authUser from '../../../../utils/middlewares/authUser'
+import updateUser from '../../../../utils/middlewares/updateUser'
 
 type PassedBody = {name : string, surname : string, email : string}
 type PassedBodyPassword = {password : string, rpassword : string}
@@ -24,24 +24,22 @@ const login = async (req : NextApiRequest, res : NextApiResponse) => {
             try {
                 const { name, surname, email } : PassedBody = body
                 if (!validateData(name, surname, email)) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
-                const _id : number | ObjectID = getUserID(query, cookies['accessToken'])
-                if (_id === 403) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
+                const user : any = await authUser(cookies, query)
+                if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 const collection = await getCollection()
-                let user : any = await findUser(collection, (_id as ObjectID), cookies['accessToken'])
-                if (user === 403) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 const user2 = await collection.findOne({
                     '$and': [
                         {
                             'email': email
                         },
                         {
-                            '_id': { '$ne': _id }
+                            '_id': { '$ne': new ObjectID(user._id) }
                         }
                     ]
                 })
                 if (user2 != null) return res.status(409).json(RegisterActions.EMAIL_EXISTS)
                 const accessToken = sign({ user: user._id }, `${process.env.ACCESS_TOKEN_SECRET}`, { expiresIn: '1d' })
-                const result = await collection.updateOne({ _id: user._id }, { $set: 
+                const result = await collection.updateOne({ _id: new ObjectID(user._id) }, { $set: 
                     { 
                         name: name.trim().toLowerCase(), 
                         surname: surname.trim().toLowerCase(), 
@@ -61,15 +59,12 @@ const login = async (req : NextApiRequest, res : NextApiResponse) => {
             try {
                 const { password, rpassword } : PassedBodyPassword = body
                 if (!validatePassword(password, rpassword)) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
-                const _id : number | ObjectID = getUserID(query, cookies['accessToken'])
-                if (_id === 403) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
-                const collection = await getCollection()
-                let user : any = await findUser(collection, (_id as ObjectID), cookies['accessToken'])
-                if (user === 403) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
+                const user : any = await authUser(cookies, query)
+                if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 const hashedPassword = await hash(password, 10)
                 const accessToken = sign({ user: user._id }, `${process.env.ACCESS_TOKEN_SECRET}`, { expiresIn: '1d' })
-                const result = await collection.updateOne({ _id }, { $set: { password: hashedPassword, accessToken } })
-                if (result.modifiedCount !== 1) throw new Error()
+                const updateResult = updateUser(new ObjectID(user._id), { password: hashedPassword, accessToken })
+                if (!updateResult) throw new Error()
                 generateCookies(res, user.name, user._id, accessToken)
                 res.status(200).json('Password edited successfully')
             }
@@ -80,12 +75,10 @@ const login = async (req : NextApiRequest, res : NextApiResponse) => {
         break
         case 'DELETE': {
             try {
-                const _id : number | ObjectID = getUserID(query, cookies['accessToken'])
-                if (_id === 403) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
+                const user : any = await authUser(cookies, query)
+                if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 const collection = await getCollection()
-                let user : any = await findUser(collection, (_id as ObjectID), cookies['accessToken'])
-                if (user === 403) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
-                const result = await collection.deleteOne({ _id })
+                const result = await collection.deleteOne({ _id: new ObjectID(user._id) })
                 if (result.deletedCount !== 1) throw new Error()
                 res.setHeader('Set-Cookie', [
                     serialize('name', '', {

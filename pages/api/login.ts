@@ -3,9 +3,9 @@ import validator from 'validator'
 import { compare } from 'bcryptjs'
 import { sign } from 'jsonwebtoken'
 
-import { connectToDatabase } from '../../utils/mongodb'
 import generateCookies from '../../utils/middlewares/generateCookies'
 import InfoTypes from '../../utils/info/InfoTypes'
+import getCollection from '../../utils/middlewares/getCollection'
 
 type PassedBody = {email : string, password : string}
 
@@ -14,8 +14,7 @@ const login = async (req : NextApiRequest, res : NextApiResponse) => {
     try {
         if (!email || !validator.isEmail(email)) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
         if (!/^[A-Za-z0-9!@#$_-]{8,30}$/.test(password)) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
-        const { db } = await connectToDatabase()
-        const collection = db.collection('users')
+        const collection = await getCollection()
         const userNumbers : number = await collection.countDocuments({ email })
         if (userNumbers === 0) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
         const user = await collection.findOne({ email })

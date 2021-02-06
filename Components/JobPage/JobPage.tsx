@@ -66,7 +66,7 @@ const JobPage : React.FC<JobPageProps> = ({ job, isFallback, addJob, jobs, remov
             {job.similarJobs.length > 0 ?
                 <SC.StyledDiv>
                     <SC.StyledP desc margin='20px 5px 10px 5px'>Similar jobs' offers</SC.StyledP>
-                    <Jobs jobs={job.similarJobs} /> 
+                    <Jobs paddingTop='0px' jobWidth='100%' jobs={job.similarJobs} /> 
                 </SC.StyledDiv> 
             : null}
         </>

@@ -3,17 +3,16 @@ import { serialize } from 'cookie'
 import { verify } from 'jsonwebtoken'
 import { ObjectID } from 'mongodb'
 
-import { connectToDatabase } from '../../utils/mongodb'
 import VerifyToken from '../../utils/interfaces/token'
 import InfoTypes from '../../utils/info/InfoTypes'
+import getCollection from '../../utils/middlewares/getCollection'
 
 const login = async (req : NextApiRequest, res : NextApiResponse) => {
     const { accessToken } = req.cookies
     try {
         const decodedToken = verify(accessToken, `${process.env.ACCESS_TOKEN_SECRET}`)
         const _id : ObjectID = new ObjectID((decodedToken as VerifyToken).user)
-        const { db } = await connectToDatabase()
-        const collection = db.collection('users')
+        const collection = await getCollection()
         const userNumbers : number = await collection.countDocuments({ _id })
         if (userNumbers === 0) return res.status(403).json(decodedToken)
         const result = await collection.updateOne({ _id }, { $set: { accessToken: '' } })

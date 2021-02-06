@@ -2,12 +2,14 @@ import styled, { StyledComponent } from 'styled-components'
 
 import { StyledButton } from '../SearchEngine/styledSearchEngine'
 
-export const StyledJobs : StyledComponent<"div", any> = styled.div`
+interface StyledJobsProps { paddingTop ?: string; }
+
+export const StyledJobs : StyledComponent<"div", any, StyledJobsProps> = styled.div<StyledJobsProps>`
     ${({ theme }) => theme.media.desktop} {
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding-top: 50px;
+        padding-top: ${({ paddingTop }) => paddingTop ? paddingTop : '50px'};
     }
 `
 
@@ -25,14 +27,14 @@ export const StyledMoreButton = styled(StyledButton)`
 `
 
 export const StyledLoader : StyledComponent<"div", any> = styled.div`
-    margin-top: 20px;
+    margin: 20px 0;
     display: flex;
     justify-content: center;
 `
 
 export const StyledMoreError : StyledComponent<"div", any> = styled.div`
     width: 90%;
-    margin: 20px auto 0 auto;
+    margin: 20px auto;
 
     ${({ theme }) => theme.media.tablet} {
         width: auto;
