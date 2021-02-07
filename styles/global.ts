@@ -1,6 +1,10 @@
-import { createGlobalStyle, GlobalStyleComponent, DefaultTheme } from 'styled-components';
+import { createGlobalStyle, GlobalStyleComponent, DefaultTheme } from 'styled-components'
 
-const GlobalStyles : GlobalStyleComponent<{}, DefaultTheme> = createGlobalStyle`
+const GlobalStyles : GlobalStyleComponent<{}, DefaultTheme> = createGlobalStyle<any>`
+    body {
+        background-color: ${({ theme }) => theme.colors.light};
+    }
+
     a {
         color: inherit;
         text-decoration: none;

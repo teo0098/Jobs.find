@@ -1,7 +1,17 @@
-import StyledLogo from './styledLogo'
+import { memo } from 'react'
+import Link from 'next/link'
 
-const Logo : React.FC = () => (
-    <StyledLogo src="/Logo.png" alt="Logo" />
+import StyledLogo from './styledLogo'
+import LogoProps from '../Menu/menuProps'
+
+const Logo : React.FC<LogoProps> = ({ turnOffNav }) => (
+    <div onClick={turnOffNav}>
+        <Link href='/'>
+            <a>
+                <StyledLogo src="/Logo.png" alt="Logo" />
+            </a>
+        </Link>
+    </div>
 )
 
-export default Logo;
+export default memo(Logo)

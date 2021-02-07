@@ -1,7 +1,11 @@
+import { memo } from 'react'
+
+import { StyledFooter } from './styledFooter'
+
 const Footer : React.FC = () => (
-    <footer>
-        Footer
-    </footer>
+    <StyledFooter>
+        All rights reserved &copy;
+    </StyledFooter>
 )
 
-export default Footer
+export default memo(Footer)

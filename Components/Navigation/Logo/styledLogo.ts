@@ -1,6 +1,6 @@
-import styled from 'styled-components'
+import styled, { StyledComponent } from 'styled-components'
 
-const StyledLogo = styled.img`
+const StyledLogo : StyledComponent<"img", any> = styled.img`
     width: 120px;
 
     ${({ theme }) => theme.media.tablet} {
