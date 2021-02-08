@@ -20,22 +20,6 @@ const login = async (req : NextApiRequest, res : NextApiResponse) => {
     const { query, body, method, cookies } = req
 
     switch (method) {
-        case 'GET': {
-            try {
-                const user : any = await authUser(cookies, { _id: 1, name: 1, accessToken: 1 }, query)
-                if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
-                const collection = await getCollection()
-                const accessToken = sign({ user: user._id }, `${process.env.ACCESS_TOKEN_SECRET}`, { expiresIn: '1d' })
-                const result = await collection.updateOne({ _id: new ObjectID(user._id) }, { $set: { accessToken } })
-                if (result.modifiedCount !== 1) throw new Error()
-                generateCookies(res, user.name, user._id, accessToken)
-                res.status(200).json('Authorized successfully')
-            }
-            catch {
-                res.status(500).json(InfoTypes.SERVER_CRASH)
-            }
-        }
-        break
         case 'PUT': {
             try {
                 const { name, surname, email } : PassedBody = body
