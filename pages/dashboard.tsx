@@ -6,6 +6,7 @@ import parseCookies from '../utils/middlewares/parseCookies'
 import authUser from '../utils/middlewares/authUser'
 import { User } from '../types/User'
 import DashboardComponent from '../Components/Dashboard/Dashboard'
+import withAuth from '../Components/HOC/withAuth'
 
 interface DashboardProps { user : User; }
 
@@ -51,4 +52,4 @@ export const getServerSideProps : GetServerSideProps = async ({ req }) => {
     }
 }
 
-export default Dashboard
+export default withAuth(Dashboard)

@@ -8,7 +8,7 @@ import authUser from '../../utils/middlewares/authUser'
 
 interface LocalProps { favJobs : Array<Job>; }
 
-const Local : React.FC<LocalProps> = ({ favJobs }) => (
+const Cloud : React.FC<LocalProps> = ({ favJobs }) => (
     <>
         <Head>
             <title>Favourite jobs in cloud</title>
@@ -36,4 +36,4 @@ export const getServerSideProps : GetServerSideProps = async ({ req }) => {
     }
 }
 
-export default Local
+export default Cloud

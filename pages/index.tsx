@@ -6,6 +6,7 @@ import SearchEngine from '../Components/SearchEngine/SearchEngine'
 import Filters from '../Components/Filters/Filters'
 import Jobs from '../Components/Jobs/Jobs'
 import { Job } from '../types/Job'
+import withAuth from '../Components/HOC/withAuth'
 
 interface HomeProps { jobs : Array<Job> | null }
 
@@ -36,4 +37,4 @@ export const getStaticProps : GetStaticProps = async () => {
   return { props: { jobs }, revalidate: 3600 }
 }
 
-export default Home
+export default withAuth(Home)

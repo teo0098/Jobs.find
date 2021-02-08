@@ -5,6 +5,7 @@ import axios, { AxiosResponse } from 'axios'
 
 import { Job, Job_v2 } from '../../types/Job'
 import JobPage from '../../Components/JobPage/JobPage'
+import withAuth from '../../Components/HOC/withAuth'
 
 interface JobProps { job : Job_v2 | null }
 
@@ -57,4 +58,4 @@ export const getStaticProps : GetStaticProps = async ({ params }) => {
     return { props: { job }, revalidate: 3600 }
 }
 
-export default JobId
+export default withAuth(JobId)
