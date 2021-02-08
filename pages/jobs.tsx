@@ -3,7 +3,6 @@ import Head from 'next/head'
 import SearchEngine from '../Components/SearchEngine/SearchEngine'
 import Filters from '../Components/Filters/Filters'
 import Jobs from '../Components/Jobs/Jobs'
-import withAuth from '../Components/HOC/withAuth'
 
 const JobsPage : React.FC = () => (
     <>
@@ -16,4 +15,4 @@ const JobsPage : React.FC = () => (
     </>
 )
 
-export default withAuth(JobsPage)
+export default JobsPage
