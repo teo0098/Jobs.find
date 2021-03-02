@@ -1,7 +1,7 @@
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever'
+import cookies from 'js-cookie'
 
 import FavouritesPage from '../FavouritesPage/FavouritesPage'
-import FavouriteCloudPageProps from './favouriteCloudPageProps'
 import * as SC from '../FavouritesPage/styledFavouritesPage'
 import Job from '../Jobs/Job/Job'
 import { StyledButton } from '../SearchEngine/styledSearchEngine'
@@ -11,13 +11,13 @@ import Modal from '../Modal/Modal'
 import Info from '../Info/Info'
 import InfoTypes from '../Info/InfoTypes'
 import Loader from '../Loader/Loader'
-import { useState } from 'react'
 import { Job as JobType } from '../../types/Job'
+import useGetData from '../customHooks/useGetData'
 
-const FavouritesCloudPage : React.FC<FavouriteCloudPageProps> = ({ jobs }) => {
+const FavouritesCloudPage : React.FC = () => {
 
     const { removeJobFromDb, state: { loading, error, errorMsg, success }, job: selectedJob } = useManageFavJobs()
-    const [offers, setOffers] = useState<Array<JobType>>(jobs)
+    const { dataLoading, userData, setUserData } = useGetData(`/api/users/${cookies.get('_id')}/favjobs`)
 
     const renderStatus = () => {
         if (loading) return (
@@ -35,24 +35,29 @@ const FavouritesCloudPage : React.FC<FavouriteCloudPageProps> = ({ jobs }) => {
             </SC.StyledWrapper>
         )
         else if (success) {
-            setOffers(prevState => prevState.filter(job => job.id !== selectedJob?.id))
+            setUserData(prevState => prevState ? (prevState as JobType[]).filter(job => job.id !== selectedJob?.id) : null)
         }
         return null
     }
 
+    const renderFabJobs = () => {
+        if (userData) return (userData as JobType[]).map((job, index : number) => (
+            <SC.StyledJob key={job.id}>
+                <Job width='100%' border={true} index={index} title={job.title} id={job.id} company_logo={job.company_logo} company={job.company} location={job.location} created_at={job.created_at} />
+                <SC.StyledButtons>
+                    <StyledButton onClick={() => removeJobFromDb(job)} color={Theme.colors.error} offsetTop='5px' width='100%' fontSize='15px'>
+                        <DeleteForeverIcon />
+                    </StyledButton>
+                    {selectedJob?.id === job.id ? renderStatus() : null}
+                </SC.StyledButtons>
+            </SC.StyledJob>
+        ))
+        return null
+    }
+
     return (
-        <FavouritesPage amount={offers.length}>
-            {offers.map((job, index : number) => (
-                <SC.StyledJob key={job.id}>
-                    <Job width='100%' border={true} index={index} title={job.title} id={job.id} company_logo={job.company_logo} company={job.company} location={job.location} created_at={job.created_at} />
-                    <SC.StyledButtons>
-                        <StyledButton onClick={() => removeJobFromDb(job)} color={Theme.colors.error} offsetTop='5px' width='100%' fontSize='15px'>
-                            <DeleteForeverIcon />
-                        </StyledButton>
-                        {selectedJob?.id === job.id ? renderStatus() : null}
-                    </SC.StyledButtons>
-                </SC.StyledJob>
-            ))}
+        <FavouritesPage amount={userData ? (userData as JobType[]).length : 0}>
+            {dataLoading && cookies.get('name') && cookies.get('_id') ? <Loader /> : renderFabJobs()}
         </FavouritesPage>
     )
 } 

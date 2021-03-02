@@ -20,6 +20,21 @@ const login = async (req : NextApiRequest, res : NextApiResponse) => {
     const { query, body, method, cookies } = req
 
     switch (method) {
+        case 'GET': {
+            try {
+                const user : any = await authUser(cookies, { password: 0, favJobs: 0 })
+                if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
+                const accessToken = sign({ user: user._id }, `${process.env.ACCESS_TOKEN_SECRET}`, { expiresIn: '1d' })
+                const updateResult = await updateUser(new ObjectID(user._id), { accessToken })
+                if (!updateResult) throw new Error()
+                generateCookies(res, user.name, user._id, accessToken)
+                res.status(200).json(user)
+            }
+            catch {
+                res.status(500).json(InfoTypes.SERVER_CRASH)
+            }
+        }
+        break
         case 'PUT': {
             try {
                 const { name, surname, email } : PassedBody = body
@@ -63,7 +78,7 @@ const login = async (req : NextApiRequest, res : NextApiResponse) => {
                 if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 const hashedPassword = await hash(password, 10)
                 const accessToken = sign({ user: user._id }, `${process.env.ACCESS_TOKEN_SECRET}`, { expiresIn: '1d' })
-                const updateResult = updateUser(new ObjectID(user._id), { password: hashedPassword, accessToken })
+                const updateResult = await updateUser(new ObjectID(user._id), { password: hashedPassword, accessToken })
                 if (!updateResult) throw new Error()
                 generateCookies(res, user.name, user._id, accessToken)
                 res.status(200).json('Password edited successfully')
