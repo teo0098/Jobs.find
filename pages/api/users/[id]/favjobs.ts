@@ -13,6 +13,21 @@ const favJobs = async (req : NextApiRequest, res : NextApiResponse) => {
     const { query, body, method, cookies } = req
 
     switch (method) {
+        case 'GET': {
+            try {
+                const user = await authUser(cookies, { accessToken: 1, favJobs: 1, name: 1 })
+                if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
+                const accessToken = sign({ user: user._id }, `${process.env.ACCESS_TOKEN_SECRET}`, { expiresIn: '1d' })
+                const updateResult = await updateUser(new ObjectID(user._id), { accessToken })
+                if (!updateResult) throw new Error()
+                generateCookies(res, user.name, user._id, accessToken)
+                res.status(200).json(user.favJobs)
+            }
+            catch {
+                res.status(500).json(InfoTypes.SERVER_CRASH)
+            }
+        }
+        break
         case 'POST': {
             try {
                 const user : any = await authUser(cookies, { password: 0, surname: 0, email: 0 }, query)

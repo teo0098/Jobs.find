@@ -17,7 +17,7 @@ const useSignin = () => {
             if (status === 500) throw new Error()
             if (status === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: data })
             dispatch({ type: RegisterActions.SUCCESS, errorMsg: '' })
-            push('/favourites/cloud')
+            push('/favourites/local')
         }
         catch {
             dispatch({ type: RegisterActions.ERROR, errorMsg: RegisterActions.UNABLE_TO_LOGIN })
