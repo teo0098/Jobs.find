@@ -27,7 +27,7 @@ const registerUser = async (req : NextApiRequest, res : NextApiResponse) => {
                 email: email.trim(),
                 password: hashedPassword,
                 favJobs: [],
-                accessToken: ''
+                refreshTokens: []
             }
             const result = await collection.insertOne(user);
             if (result.insertedCount !== 1) throw new Error()
