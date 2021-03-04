@@ -16,9 +16,16 @@ const useManageAccount = () => {
         setEdited(0)
         dispatch({ type: RegisterActions.LOADING, errorMsg: '' })
         try {
-            const { status, data } = await axios.put(`/api/users/${cookies.get('_id')}/account`, values)
+            const { status } = await axios.put(`/api/users/${cookies.get('_id')}/account`, values)
             if (status === 500) throw new Error()
-            if (status === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: data })
+            if (status === 403) {
+                const { data: tokenData, status: tokenStatus } = await axios.get(`/api/users/${cookies.get('_id')}/token`)
+                if (tokenStatus === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: tokenData })
+                const { data: newData, status: newStatus } = await axios.put(`/api/users/${cookies.get('_id')}/account`, values)
+                if (newStatus === 500) throw new Error()
+                if (newStatus === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: newData })
+                if (newStatus === 409) return dispatch({ type: RegisterActions.ERROR, errorMsg: RegisterActions.EMAIL_IN_USE })
+            }
             if (status === 409) return dispatch({ type: RegisterActions.ERROR, errorMsg: RegisterActions.EMAIL_IN_USE })
             dispatch({ type: RegisterActions.SUCCESS, errorMsg: '' })
             cookies.set('name', (values.name as string).trim().toLowerCase())
@@ -32,9 +39,15 @@ const useManageAccount = () => {
         setEdited(1)
         dispatch({ type: RegisterActions.LOADING, errorMsg: '' })
         try {
-            const { status, data } = await axios.patch(`/api/users/${cookies.get('_id')}/account`, values)
+            const { status } = await axios.patch(`/api/users/${cookies.get('_id')}/account`, values)
             if (status === 500) throw new Error()
-            if (status === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: data })
+            if (status === 403) {
+                const { data: tokenData, status: tokenStatus } = await axios.get(`/api/users/${cookies.get('_id')}/token`)
+                if (tokenStatus === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: tokenData })
+                const { data: newData, status: newStatus } = await axios.patch(`/api/users/${cookies.get('_id')}/account`, values)
+                if (newStatus === 500) throw new Error()
+                if (newStatus === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: newData })
+            }
             dispatch({ type: RegisterActions.SUCCESS, errorMsg: '' })
         }
         catch {

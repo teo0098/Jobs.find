@@ -14,7 +14,7 @@ const favJobs = async (req : NextApiRequest, res : NextApiResponse) => {
     switch (method) {
         case 'GET': {
             try {
-                const user = await authUser(cookies, { accessToken: 1, favJobs: 1, name: 1 }, 'accessToken', `${process.env.ACCESS_TOKEN_SECRET}`, query)
+                const user = await authUser(cookies, { favJobs: 1 }, 'accessToken', `${process.env.ACCESS_TOKEN_SECRET}`, query)
                 if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 res.status(200).json(user.favJobs)
             }
