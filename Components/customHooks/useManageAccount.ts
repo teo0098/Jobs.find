@@ -59,9 +59,15 @@ const useManageAccount = () => {
         setEdited(2)
         dispatch({ type: RegisterActions.LOADING, errorMsg: '' })
         try {
-            const { status, data } = await axios.delete(`/api/users/${cookies.get('_id')}/account`)
+            const { status } = await axios.delete(`/api/users/${cookies.get('_id')}/account`)
             if (status === 500) throw new Error()
-            if (status === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: data })
+            if (status === 403) {
+                const { data: tokenData, status: tokenStatus } = await axios.get(`/api/users/${cookies.get('_id')}/token`)
+                if (tokenStatus === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: tokenData })
+                const { data: newData, status: newStatus } = await axios.delete(`/api/users/${cookies.get('_id')}/account`)
+                if (newStatus === 500) throw new Error()
+                if (newStatus === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: newData })
+            }
             dispatch({ type: RegisterActions.SUCCESS, errorMsg: '' })
             push('/signin')
         }

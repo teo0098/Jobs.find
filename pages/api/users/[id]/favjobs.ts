@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { sign } from 'jsonwebtoken'
 import { ObjectID } from 'mongodb'
 
 import { Job } from '../../../../types/Job'
@@ -25,7 +24,7 @@ const favJobs = async (req : NextApiRequest, res : NextApiResponse) => {
         break
         case 'POST': {
             try {
-                const user : any = await authUser(cookies, { password: 0, surname: 0, email: 0 }, 'accessToken', `${process.env.ACCESS_TOKEN_SECRET}`, query)
+                const user : any = await authUser(cookies, { _id: 1, favJobs: 1 }, 'accessToken', `${process.env.ACCESS_TOKEN_SECRET}`, query)
                 if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 const jobExists = user.favJobs.find((j : Job) => j.id === body.id)
                 if (jobExists !== undefined) return res.status(409).json(RegisterActions.JOB_EXISTS)
@@ -41,11 +40,10 @@ const favJobs = async (req : NextApiRequest, res : NextApiResponse) => {
         break
         case 'DELETE': {
             try {
-                const user : any = await authUser(cookies, { password: 0, surname: 0, email: 0 }, 'accessToken', `${process.env.ACCESS_TOKEN_SECRET}`, query)
+                const user : any = await authUser(cookies, { _id: 1, favJobs: 1 }, 'accessToken', `${process.env.ACCESS_TOKEN_SECRET}`, query)
                 if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 const favJobs : Array<Job> = (user.favJobs as Array<Job>).filter(j => j.id !== query.job)
-                const accessToken = sign({ user: user._id }, `${process.env.ACCESS_TOKEN_SECRET}`, { expiresIn: '1d' })
-                const updateResult = await updateUser(new ObjectID(user._id), { favJobs, accessToken })
+                const updateResult = await updateUser(new ObjectID(user._id), { favJobs })
                 if (!updateResult) throw new Error()
                 res.status(200).json('Job deleted successfully')
             }

@@ -33,7 +33,7 @@ const account = async (req : NextApiRequest, res : NextApiResponse) => {
             try {
                 const { name, surname, email } : PassedBody = body
                 if (!validateData(name, surname, email)) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
-                const user : any = await authUser(cookies, { _id: 1, name: 1 }, 'accessToken', `${process.env.ACCESS_TOKEN_SECRET}`, query)
+                const user : any = await authUser(cookies, { _id: 1 }, 'accessToken', `${process.env.ACCESS_TOKEN_SECRET}`, query)
                 if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 const collection = await getCollection()
                 const user2 = await collection.findOne({
@@ -66,7 +66,7 @@ const account = async (req : NextApiRequest, res : NextApiResponse) => {
             try {
                 const { password, rpassword } : PassedBodyPassword = body
                 if (!validatePassword(password, rpassword)) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
-                const user : any = await authUser(cookies, { _id: 1, name: 1 }, 'accessToken', `${process.env.ACCESS_TOKEN_SECRET}`, query)
+                const user : any = await authUser(cookies, { _id: 1 }, 'accessToken', `${process.env.ACCESS_TOKEN_SECRET}`, query)
                 if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 const hashedPassword = await hash(password, 10)
                 const updateResult = await updateUser(new ObjectID(user._id), { password: hashedPassword })
