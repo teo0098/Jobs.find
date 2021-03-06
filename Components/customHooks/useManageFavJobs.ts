@@ -14,9 +14,16 @@ const useManageFavJobs = () => {
     const add = async (offer : Job) => {
         dispatch({ type: RegisterActions.LOADING, errorMsg: '' })
         try {
-            const { status, data } = await axios.post(`/api/users/${cookies.get('_id')}/favjobs`, offer)
+            const { status } = await axios.post(`/api/users/${cookies.get('_id')}/favjobs`, offer)
             if (status === 500) throw new Error()
-            if (status === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: data })
+            if (status === 403) {
+                const { data: tokenData, status: tokenStatus } = await axios.get(`/api/users/${cookies.get('_id')}/token`)
+                if (tokenStatus === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: tokenData })
+                const { data: newData, status: newStatus } = await axios.post(`/api/users/${cookies.get('_id')}/favjobs`, offer)
+                if (newStatus === 500) throw new Error()
+                if (newStatus === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: newData })
+                if (newStatus === 409) return dispatch({ type: RegisterActions.ERROR, errorMsg: RegisterActions.JOB_EXISTS })
+            }
             if (status === 409) return dispatch({ type: RegisterActions.ERROR, errorMsg: RegisterActions.JOB_EXISTS })
             dispatch({ type: RegisterActions.SUCCESS, errorMsg: '' })
         }
@@ -33,9 +40,15 @@ const useManageFavJobs = () => {
     const remove = async (offer : Job) => {
         dispatch({ type: RegisterActions.LOADING, errorMsg: '' })
         try {
-            const { status, data } = await axios.delete(`/api/users/${cookies.get('_id')}/favjobs?job=${encodeURIComponent(offer.id)}`)
+            const { status } = await axios.delete(`/api/users/${cookies.get('_id')}/favjobs?job=${encodeURIComponent(offer.id)}`)
             if (status === 500) throw new Error()
-            if (status === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: data })
+            if (status === 403) {
+                const { data: tokenData, status: tokenStatus } = await axios.get(`/api/users/${cookies.get('_id')}/token`)
+                if (tokenStatus === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: tokenData })
+                const { data: newData, status: newStatus } = await axios.delete(`/api/users/${cookies.get('_id')}/favjobs?job=${encodeURIComponent(offer.id)}`)
+                if (newStatus === 500) throw new Error()
+                if (newStatus === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: newData })
+            }
             dispatch({ type: RegisterActions.SUCCESS, errorMsg: '' })
         }
         catch {

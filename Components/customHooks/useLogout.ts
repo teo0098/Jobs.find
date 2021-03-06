@@ -1,5 +1,6 @@
 import { useReducer, useState } from 'react'
 import { useRouter } from 'next/router'
+import cookies from 'js-cookie'
 
 import axios from '../../axiosInstance'
 import { initialState, reducer } from '../../useReducers/registerReducer/registerReducer'
@@ -15,13 +16,17 @@ const useLogout = () => {
         dispatch({ type: RegisterActions.LOADING, errorMsg: '' })
         try {
             const { status } = await axios.get('/api/logout')
-            if (status === 500) throw new Error()
+            if (status === 500 || status === 403) throw new Error()
             dispatch({ type: RegisterActions.SUCCESS, errorMsg: '' })
-            setSubmenu(false)
-            push('/signin')
         }
         catch {
+            cookies.remove('name')
+            cookies.remove('_id')
             dispatch({ type: RegisterActions.ERROR, errorMsg: '' })
+        }
+        finally {
+            setSubmenu(false)
+            push('/signin')
         }
     }
 

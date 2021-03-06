@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { sign } from 'jsonwebtoken'
 import { ObjectID } from 'mongodb'
 
-import generateCookies from '../../../../utils/middlewares/generateCookies'
 import { Job } from '../../../../types/Job'
 import RegisterActions from '../../../../useReducers/registerReducer/actionTypes'
 import InfoTypes from '../../../../utils/info/InfoTypes'
@@ -15,12 +13,8 @@ const favJobs = async (req : NextApiRequest, res : NextApiResponse) => {
     switch (method) {
         case 'GET': {
             try {
-                const user = await authUser(cookies, { accessToken: 1, favJobs: 1, name: 1 })
+                const user = await authUser(cookies, { favJobs: 1 }, 'accessToken', `${process.env.ACCESS_TOKEN_SECRET}`, query)
                 if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
-                const accessToken = sign({ user: user._id }, `${process.env.ACCESS_TOKEN_SECRET}`, { expiresIn: '1d' })
-                const updateResult = await updateUser(new ObjectID(user._id), { accessToken })
-                if (!updateResult) throw new Error()
-                generateCookies(res, user.name, user._id, accessToken)
                 res.status(200).json(user.favJobs)
             }
             catch {
@@ -30,15 +24,13 @@ const favJobs = async (req : NextApiRequest, res : NextApiResponse) => {
         break
         case 'POST': {
             try {
-                const user : any = await authUser(cookies, { password: 0, surname: 0, email: 0 }, query)
+                const user : any = await authUser(cookies, { _id: 1, favJobs: 1 }, 'accessToken', `${process.env.ACCESS_TOKEN_SECRET}`, query)
                 if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 const jobExists = user.favJobs.find((j : Job) => j.id === body.id)
                 if (jobExists !== undefined) return res.status(409).json(RegisterActions.JOB_EXISTS)
                 const favJobs : Array<Job> = [...user.favJobs, body]
-                const accessToken = sign({ user: user._id }, `${process.env.ACCESS_TOKEN_SECRET}`, { expiresIn: '1d' })
-                const updateResult = await updateUser(new ObjectID(user._id), { favJobs, accessToken })
+                const updateResult = await updateUser(new ObjectID(user._id), { favJobs })
                 if (!updateResult) throw new Error()
-                generateCookies(res, user.name, user._id, accessToken)
                 res.status(201).json('Job added successfully')
             }
             catch {
@@ -48,13 +40,11 @@ const favJobs = async (req : NextApiRequest, res : NextApiResponse) => {
         break
         case 'DELETE': {
             try {
-                const user : any = await authUser(cookies, { password: 0, surname: 0, email: 0 }, query)
+                const user : any = await authUser(cookies, { _id: 1, favJobs: 1 }, 'accessToken', `${process.env.ACCESS_TOKEN_SECRET}`, query)
                 if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 const favJobs : Array<Job> = (user.favJobs as Array<Job>).filter(j => j.id !== query.job)
-                const accessToken = sign({ user: user._id }, `${process.env.ACCESS_TOKEN_SECRET}`, { expiresIn: '1d' })
-                const updateResult = await updateUser(new ObjectID(user._id), { favJobs, accessToken })
+                const updateResult = await updateUser(new ObjectID(user._id), { favJobs })
                 if (!updateResult) throw new Error()
-                generateCookies(res, user.name, user._id, accessToken)
                 res.status(200).json('Job deleted successfully')
             }
             catch {
@@ -63,7 +53,7 @@ const favJobs = async (req : NextApiRequest, res : NextApiResponse) => {
         }
         break
         default: {
-            res.setHeader('Allow', ['POST', 'DELETE'])
+            res.setHeader('Allow', ['POST', 'DELETE', 'GET'])
             res.status(405).end(`Method ${method} Not Allowed`)
         }
     }

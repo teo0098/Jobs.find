@@ -44,7 +44,7 @@ const FavouritesCloudPage : React.FC = () => {
         if (userData) return (userData as JobType[]).map((job, index : number) => (
             <SC.StyledJob key={job.id}>
                 <Job width='100%' border={true} index={index} title={job.title} id={job.id} company_logo={job.company_logo} company={job.company} location={job.location} created_at={job.created_at} />
-                <SC.StyledButtons>
+                <SC.StyledButtons buttons={1}>
                     <StyledButton onClick={() => removeJobFromDb(job)} color={Theme.colors.error} offsetTop='5px' width='100%' fontSize='15px'>
                         <DeleteForeverIcon />
                     </StyledButton>

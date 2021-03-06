@@ -39,12 +39,14 @@ export const StyledJob : StyledComponent<"div", any> = styled.div`
     margin-top: 20px;
 `
 
-export const StyledButtons : StyledComponent<"div", any> = styled.div`
+interface StyledButtonsProps { buttons ?: number }
+
+export const StyledButtons : StyledComponent<"div", any, StyledButtonsProps> = styled.div<StyledButtonsProps>`
     ${({ theme }) => theme.media.tablet} {
         display: grid;
-        grid-template-columns: min-content min-content;
+        grid-template-columns: ${({ buttons }) => buttons && buttons === 1 ? 'min-content' : 'min-content min-content'};
         justify-content: center;
-        column-gap: 10px;
+        column-gap: ${({ buttons }) => buttons && buttons === 1 ? '0px' : '10px'};
     }
 `
 

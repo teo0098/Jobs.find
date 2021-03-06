@@ -15,8 +15,17 @@ const useGetData = (url : string) => {
             try {
                 if (!cookies.get('name') || !cookies.get('_id')) throw new Error()
                 const { data, status } = await axios.get(url)
-                if (status === 403 || status === 500) throw new Error()
-                setUserData(data)
+                if (status === 500) throw new Error()
+                if (status === 403) {
+                    const { status: tokenStatus } = await axios.get(`/api/users/${cookies.get('_id')}/token`)
+                    if (tokenStatus === 403) throw new Error()
+                    const { data: newData, status: newStatus } = await axios.get(url)
+                    if (newStatus === 500 || newStatus === 403) throw new Error()
+                    setUserData(newData)
+                }
+                else {
+                    setUserData(data)
+                }
             }
             catch {
                 setUserData(null)

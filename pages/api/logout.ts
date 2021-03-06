@@ -1,25 +1,21 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { serialize } from 'cookie'
-import { verify } from 'jsonwebtoken'
 import { ObjectID } from 'mongodb'
 
-import VerifyToken from '../../utils/interfaces/token'
 import InfoTypes from '../../utils/info/InfoTypes'
-import getCollection from '../../utils/middlewares/getCollection'
+import authUser from '../../utils/middlewares/authUser'
+import updateUser from '../../utils/middlewares/updateUser'
 
-const login = async (req : NextApiRequest, res : NextApiResponse) => {
+const logout = async (req : NextApiRequest, res : NextApiResponse) => {
     const { method, cookies } = req
 
     if (method === 'GET') {
-        const { accessToken } = cookies
         try {
-            const decodedToken = verify(accessToken, `${process.env.ACCESS_TOKEN_SECRET}`)
-            const _id : ObjectID = new ObjectID((decodedToken as VerifyToken).user)
-            const collection = await getCollection()
-            const userNumbers : number = await collection.countDocuments({ _id })
-            if (userNumbers === 0) return res.status(403).json(decodedToken)
-            const result = await collection.updateOne({ _id }, { $set: { accessToken: '' } })
-            if (result.modifiedCount !== 1) throw new Error()
+            const user = await authUser(cookies, { refreshTokens: 1 }, 'refreshToken', `${process.env.REFRESH_TOKEN_SECRET}`)
+            if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
+            if (!user.refreshTokens.includes(cookies['refreshToken'])) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
+            const updateResult = await updateUser(new ObjectID(user._id), { refreshTokens: [...user.refreshTokens.filter((token : string) => token !== cookies['refreshToken'])] })
+            if (!updateResult) throw new Error()
             res.setHeader('Set-Cookie', [
                 serialize('name', '', {
                     path: '/',
@@ -32,6 +28,11 @@ const login = async (req : NextApiRequest, res : NextApiResponse) => {
                     maxAge: 0
                 }),
                 serialize('accessToken', '', {
+                    path: '/',
+                    sameSite: 'strict',
+                    maxAge: 0
+                }),
+                serialize('refreshToken', '', {
                     path: '/',
                     sameSite: 'strict',
                     maxAge: 0
@@ -49,4 +50,4 @@ const login = async (req : NextApiRequest, res : NextApiResponse) => {
     }
 }
   
-export default login
+export default logout
