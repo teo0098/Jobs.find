@@ -1,7 +1,7 @@
-import axios from '../../axiosInstance'
 import cookies from 'js-cookie'
 import { useReducer, useState } from 'react'
 
+import axios from '../../axiosInstance'
 import { Job } from "../../types/Job"
 import { reducer, initialState } from '../../useReducers/registerReducer/registerReducer'
 import RegisterActions from '../../useReducers/registerReducer/actionTypes'

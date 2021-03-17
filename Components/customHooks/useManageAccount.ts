@@ -1,8 +1,8 @@
 import { useReducer, useState } from "react"
-import axios from '../../axiosInstance'
 import cookies from 'js-cookie'
 import { useRouter } from "next/router"
 
+import axios from '../../axiosInstance'
 import RegisterActions from "../../useReducers/registerReducer/actionTypes"
 import { initialState, reducer } from "../../useReducers/registerReducer/registerReducer"
 
@@ -28,7 +28,7 @@ const useManageAccount = () => {
             }
             if (status === 409) return dispatch({ type: RegisterActions.ERROR, errorMsg: RegisterActions.EMAIL_IN_USE })
             dispatch({ type: RegisterActions.SUCCESS, errorMsg: '' })
-            cookies.set('name', (values.name as string).trim().toLowerCase())
+            cookies.set('name', (values.name as string).trim().toLowerCase(), { expires: 400 * 100 })
         }
         catch {
             dispatch({ type: RegisterActions.ERROR, errorMsg: RegisterActions.UNABLE_TO_EDIT })
