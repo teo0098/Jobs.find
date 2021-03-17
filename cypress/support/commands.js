@@ -34,8 +34,6 @@ Cypress.Commands.add('requestSeekJobs', filter => {
 })
 
 Cypress.Commands.add('registerUser', code => {
-    cy.get('input[name=email]').type("something@wp.pl")
-    cy.get('button[type="submit"]').click()
     cy.request({
         method: 'POST',
         url: '/api/account',
@@ -43,21 +41,20 @@ Cypress.Commands.add('registerUser', code => {
         body: { 
             name: 'Jan',
             surname: 'Kowalski',
-            email: 'something@wp.pl',
-            password: '12345678',
-            rpassword: '12345678',
+            email: `${Cypress.env('LOGIN_EMAIL')}`,
+            password: `${Cypress.env('LOGIN_PASSWORD')}`,
+            rpassword: `${Cypress.env('LOGIN_PASSWORD')}`,
             adult: true 
         }
     }).then(({ body, status }) => {
-        cy.get('#loader').should('not.be.visible')
         expect(status).to.eq(code)
         expect(body).to.be.a('string')
     })
 })
 
 Cypress.Commands.add('loginUser', (code, email, password) => {
-    cy.get('input[name=email]').type(email)
-    cy.get('input[name=password]').type(password)
+    cy.get('input[name=email]').clear().type(email)
+    cy.get('input[name=password]').clear().type(password)
     cy.get('button[type="submit"]').click()
     cy.get('#loader').should('be.visible')
     cy.request({
@@ -68,5 +65,15 @@ Cypress.Commands.add('loginUser', (code, email, password) => {
     }).then(({ status }) => {
         cy.get('#loader').should('not.be.visible')
         expect(status).to.eq(code)
+    })
+})
+
+Cypress.Commands.add('clearDB', () => {
+    cy.request({
+        method: 'DELETE',
+        url: '/api/db',
+        failOnStatusCode: false
+    }).then(({ status }) => {
+        expect(status).to.eq(200)
     })
 })

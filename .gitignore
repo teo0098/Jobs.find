@@ -34,3 +34,5 @@ yarn-error.log*
 .vercel
 
 cypress.env.json
+
+db.ts
