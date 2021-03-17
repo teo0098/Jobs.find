@@ -2,13 +2,10 @@
   "name": "app",
   "version": "0.1.0",
   "private": true,
-  "engines": {
-    "node": "14.x"
-  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p $PORT",
+    "start": "next start",
     "cypress": "node_modules\\.bin\\cypress open"
   },
   "dependencies": {
