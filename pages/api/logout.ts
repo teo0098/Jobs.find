@@ -9,6 +9,8 @@ import updateUser from '../../utils/middlewares/updateUser'
 const logout = async (req : NextApiRequest, res : NextApiResponse) => {
     const { method, cookies } = req
 
+    res.setHeader('Content-Type', 'application/json');
+
     if (method === 'GET') {
         try {
             const user = await authUser(cookies, { refreshTokens: 1 }, 'refreshToken', `${process.env.REFRESH_TOKEN_SECRET}`)
@@ -19,21 +21,25 @@ const logout = async (req : NextApiRequest, res : NextApiResponse) => {
             res.setHeader('Set-Cookie', [
                 serialize('name', '', {
                     path: '/',
+                    domain: process.env.NODE_ENV === 'production' ? '.jobsfind.vercel.app' : 'localhost',
                     sameSite: 'strict',
                     maxAge: 0
                 }),
                 serialize('_id', '', {
                     path: '/',
+                    domain: process.env.NODE_ENV === 'production' ? '.jobsfind.vercel.app' : 'localhost',
                     sameSite: 'strict',
                     maxAge: 0
                 }),
                 serialize('accessToken', '', {
                     path: '/',
+                    domain: process.env.NODE_ENV === 'production' ? '.jobsfind.vercel.app' : 'localhost',
                     sameSite: 'strict',
                     maxAge: 0
                 }),
                 serialize('refreshToken', '', {
                     path: '/',
+                    domain: process.env.NODE_ENV === 'production' ? '.jobsfind.vercel.app' : 'localhost',
                     sameSite: 'strict',
                     maxAge: 0
                 })
