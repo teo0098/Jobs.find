@@ -17,6 +17,8 @@ type PassedBodyPassword = {password : string, rpassword : string}
 const account = async (req : NextApiRequest, res : NextApiResponse) => {
     const { query, body, method, cookies } = req
 
+    res.setHeader('Content-Type', 'application/json')
+
     switch (method) {
         case 'GET': {
             try {
@@ -88,26 +90,31 @@ const account = async (req : NextApiRequest, res : NextApiResponse) => {
                 res.setHeader('Set-Cookie', [
                     serialize('name', '', {
                         path: '/',
+                        domain: process.env.NODE_ENV === 'production' ? '.jobsfind.vercel.app' : 'localhost',
                         sameSite: 'strict',
                         maxAge: 0
                     }),
                     serialize('_id', '', {
                         path: '/',
+                        domain: process.env.NODE_ENV === 'production' ? '.jobsfind.vercel.app' : 'localhost',
                         sameSite: 'strict',
                         maxAge: 0
                     }),
                     serialize('accessToken', '', {
                         path: '/',
+                        domain: process.env.NODE_ENV === 'production' ? '.jobsfind.vercel.app' : 'localhost',
                         sameSite: 'strict',
                         maxAge: 0
                     }),
                     serialize('accountDeleted', 'yes', {
                         path: '/',
+                        domain: process.env.NODE_ENV === 'production' ? '.jobsfind.vercel.app' : 'localhost',
                         sameSite: 'strict',
                         maxAge: 5
                     }),
                     serialize('refreshToken', '', {
                         path: '/',
+                        domain: process.env.NODE_ENV === 'production' ? '.jobsfind.vercel.app' : 'localhost',
                         sameSite: 'strict',
                         maxAge: 0
                     })

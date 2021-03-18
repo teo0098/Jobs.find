@@ -8,6 +8,8 @@ import authUser from '../../../../utils/middlewares/authUser'
 const token = async (req : NextApiRequest, res : NextApiResponse) => {
     const { method, cookies, query } = req
 
+    res.setHeader('Content-Type', 'application/json');
+
     if (method === 'GET') {
         try {
             const user = await authUser(cookies, { refreshTokens: 1, name: 1 }, 'refreshToken', `${process.env.REFRESH_TOKEN_SECRET}`, query)
@@ -17,6 +19,7 @@ const token = async (req : NextApiRequest, res : NextApiResponse) => {
             res.setHeader('Set-Cookie', [
                 serialize('accessToken', accessToken, {
                     path: '/',
+                    domain: process.env.NODE_ENV === 'production' ? '.jobsfind.vercel.app' : 'localhost',
                     httpOnly: true,
                     secure: process.env.NODE_ENV === 'production',
                     sameSite: 'strict',
