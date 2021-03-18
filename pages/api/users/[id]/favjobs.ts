@@ -10,8 +10,6 @@ import updateUser from '../../../../utils/middlewares/updateUser'
 const favJobs = async (req : NextApiRequest, res : NextApiResponse) => {
     const { query, body, method, cookies } = req
 
-    res.setHeader('Content-Type', 'application/json');
-
     switch (method) {
         case 'GET': {
             try {

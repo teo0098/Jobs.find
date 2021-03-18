@@ -11,8 +11,6 @@ type PassedBody = {email : string, password : string}
 
 const login = async (req : NextApiRequest, res : NextApiResponse) => {
     const { method, body } = req
-
-    res.setHeader('Content-Type', 'application/json');
     
     if (method === 'POST') {
         try {
