@@ -20,7 +20,6 @@ const useLogout = () => {
             dispatch({ type: RegisterActions.SUCCESS, errorMsg: '' })
         }
         catch {
-            cookies.remove('name')
             cookies.remove('_id')
             dispatch({ type: RegisterActions.ERROR, errorMsg: '' })
         }

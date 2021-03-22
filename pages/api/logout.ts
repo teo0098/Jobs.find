@@ -11,23 +11,13 @@ const logout = async (req : NextApiRequest, res : NextApiResponse) => {
 
     if (method === 'GET') {
         try {
-            const user = await authUser(cookies, { refreshTokens: 1 }, 'refreshToken', `${process.env.REFRESH_TOKEN_SECRET}`)
+            const user = await authUser(cookies, { refreshTokens: 1 }, cookies['refreshToken'], `${process.env.REFRESH_TOKEN_SECRET}`)
             if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
             if (!user.refreshTokens.includes(cookies['refreshToken'])) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
             const updateResult = await updateUser(new ObjectID(user._id), { refreshTokens: [...user.refreshTokens.filter((token : string) => token !== cookies['refreshToken'])] })
             if (!updateResult) throw new Error()
             res.setHeader('Set-Cookie', [
-                serialize('name', '', {
-                    path: '/',
-                    sameSite: 'strict',
-                    maxAge: 0
-                }),
                 serialize('_id', '', {
-                    path: '/',
-                    sameSite: 'strict',
-                    maxAge: 0
-                }),
-                serialize('accessToken', '', {
                     path: '/',
                     sameSite: 'strict',
                     maxAge: 0

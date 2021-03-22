@@ -6,6 +6,7 @@ import RegisterActions from '../../../../useReducers/registerReducer/actionTypes
 import InfoTypes from '../../../../utils/info/InfoTypes'
 import authUser from '../../../../utils/middlewares/authUser'
 import updateUser from '../../../../utils/middlewares/updateUser'
+import parseAuthHeader from '../../../../utils/middlewares/parseAuthHeader'
 
 const favJobs = async (req : NextApiRequest, res : NextApiResponse) => {
     const { query, body, method, cookies } = req
@@ -13,7 +14,7 @@ const favJobs = async (req : NextApiRequest, res : NextApiResponse) => {
     switch (method) {
         case 'GET': {
             try {
-                const user = await authUser(cookies, { favJobs: 1 }, 'accessToken', `${process.env.ACCESS_TOKEN_SECRET}`, query)
+                const user = await authUser(cookies, { favJobs: 1 }, parseAuthHeader(req), `${process.env.ACCESS_TOKEN_SECRET}`, query)
                 if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 res.status(200).json(user.favJobs)
             }
@@ -24,7 +25,7 @@ const favJobs = async (req : NextApiRequest, res : NextApiResponse) => {
         break
         case 'POST': {
             try {
-                const user : any = await authUser(cookies, { _id: 1, favJobs: 1 }, 'accessToken', `${process.env.ACCESS_TOKEN_SECRET}`, query)
+                const user : any = await authUser(cookies, { _id: 1, favJobs: 1 }, parseAuthHeader(req), `${process.env.ACCESS_TOKEN_SECRET}`, query)
                 if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 const jobExists = user.favJobs.find((j : Job) => j.id === body.id)
                 if (jobExists !== undefined) return res.status(409).json(RegisterActions.JOB_EXISTS)
@@ -40,7 +41,7 @@ const favJobs = async (req : NextApiRequest, res : NextApiResponse) => {
         break
         case 'DELETE': {
             try {
-                const user : any = await authUser(cookies, { _id: 1, favJobs: 1 }, 'accessToken', `${process.env.ACCESS_TOKEN_SECRET}`, query)
+                const user : any = await authUser(cookies, { _id: 1, favJobs: 1 }, parseAuthHeader(req), `${process.env.ACCESS_TOKEN_SECRET}`, query)
                 if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 const favJobs : Array<Job> = (user.favJobs as Array<Job>).filter(j => j.id !== query.job)
                 const updateResult = await updateUser(new ObjectID(user._id), { favJobs })

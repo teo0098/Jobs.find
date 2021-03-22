@@ -5,7 +5,7 @@ import axios from '../../axiosInstance'
 import { initialState, reducer } from '../../useReducers/registerReducer/registerReducer'
 import RegisterActions from '../../useReducers/registerReducer/actionTypes'
 
-const useSignin = () => {
+const useSignin = (changeName : (name: string) => void) => {
 
     const [state, dispatch] = useReducer(reducer, initialState)
     const { push } = useRouter()
@@ -17,6 +17,7 @@ const useSignin = () => {
             if (status === 500) throw new Error()
             if (status === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: data })
             dispatch({ type: RegisterActions.SUCCESS, errorMsg: '' })
+            changeName(data as string)
             push('/favourites/local')
         }
         catch {

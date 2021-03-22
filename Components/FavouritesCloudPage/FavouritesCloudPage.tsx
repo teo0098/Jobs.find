@@ -57,7 +57,7 @@ const FavouritesCloudPage : React.FC = () => {
 
     return (
         <FavouritesPage amount={userData ? (userData as JobType[]).length : 0}>
-            {dataLoading && cookies.get('name') && cookies.get('_id') ? <Loader /> : renderFabJobs()}
+            {dataLoading && cookies.get('_id') ? <Loader /> : renderFabJobs()}
         </FavouritesPage>
     )
 } 

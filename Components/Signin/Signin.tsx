@@ -1,6 +1,7 @@
 import { Form } from 'react-final-form'
 import createDecorator from 'final-form-focus'
 import cookies from 'js-cookie'
+import { connect } from 'react-redux'
 
 import useSignin from '../customHooks/useSignin'
 import { StyledButton } from '../SearchEngine/styledSearchEngine'
@@ -12,12 +13,13 @@ import Modal from '../Modal/Modal'
 import Info from '../Info/Info'
 import InfoTypes from '../Info/InfoTypes'
 import { StyledDiv } from '../Signup/styledSignup'
+import mapUserDispatchToProps from '../../store/user/mapUserDispatchToProps'
 
 const focusOnErrorDecorator = createDecorator()
 
-const Signin : React.FC = () => {
+const Signin : React.FC<{ changeName : (name: string) => void }> = ({ changeName }) => {
 
-    const { handleOnSubmit, state: { error, errorMsg, loading } } = useSignin()
+    const { handleOnSubmit, state: { error, errorMsg, loading } } = useSignin(changeName)
 
     return (
         <>
@@ -49,4 +51,4 @@ const Signin : React.FC = () => {
     )
 }
 
-export default Signin
+export default connect(null, mapUserDispatchToProps)(Signin)
