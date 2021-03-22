@@ -6,8 +6,6 @@ import JobsActions from '../../useReducers/jobsReducer/actionTypes'
 const getMoreJobs = async (req : NextApiRequest, res : NextApiResponse) => {
   const { method } = req
 
-  res.setHeader('Content-Type', 'application/json');
-
   if (method === 'GET') {
     try {
       const page = req.query.page ? req.query.page : 1

@@ -10,6 +10,7 @@ import InfoTypes from '../../../../utils/info/InfoTypes'
 import RegisterActions from '../../../../useReducers/registerReducer/actionTypes'
 import authUser from '../../../../utils/middlewares/authUser'
 import updateUser from '../../../../utils/middlewares/updateUser'
+import parseAuthHeader from '../../../../utils/middlewares/parseAuthHeader'
 
 type PassedBody = {name : string, surname : string, email : string}
 type PassedBodyPassword = {password : string, rpassword : string}
@@ -17,12 +18,10 @@ type PassedBodyPassword = {password : string, rpassword : string}
 const account = async (req : NextApiRequest, res : NextApiResponse) => {
     const { query, body, method, cookies } = req
 
-    res.setHeader('Content-Type', 'application/json')
-
     switch (method) {
         case 'GET': {
             try {
-                const user = await authUser(cookies, { password: 0, favJobs: 0, refreshTokens: 0 }, 'accessToken', `${process.env.ACCESS_TOKEN_SECRET}`, query)
+                const user = await authUser(cookies, { password: 0, favJobs: 0, refreshTokens: 0 }, parseAuthHeader(req), `${process.env.ACCESS_TOKEN_SECRET}`, query)
                 if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 res.status(200).json(user)
             }
@@ -35,7 +34,7 @@ const account = async (req : NextApiRequest, res : NextApiResponse) => {
             try {
                 const { name, surname, email } : PassedBody = body
                 if (!validateData(name, surname, email)) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
-                const user : any = await authUser(cookies, { _id: 1 }, 'accessToken', `${process.env.ACCESS_TOKEN_SECRET}`, query)
+                const user : any = await authUser(cookies, { _id: 1 }, parseAuthHeader(req), `${process.env.ACCESS_TOKEN_SECRET}`, query)
                 if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 const collection = await getCollection()
                 const user2 = await collection.findOne({
@@ -68,7 +67,7 @@ const account = async (req : NextApiRequest, res : NextApiResponse) => {
             try {
                 const { password, rpassword } : PassedBodyPassword = body
                 if (!validatePassword(password, rpassword)) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
-                const user : any = await authUser(cookies, { _id: 1 }, 'accessToken', `${process.env.ACCESS_TOKEN_SECRET}`, query)
+                const user : any = await authUser(cookies, { _id: 1 }, parseAuthHeader(req), `${process.env.ACCESS_TOKEN_SECRET}`, query)
                 if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 const hashedPassword = await hash(password, 10)
                 const updateResult = await updateUser(new ObjectID(user._id), { password: hashedPassword })
@@ -82,39 +81,24 @@ const account = async (req : NextApiRequest, res : NextApiResponse) => {
         break
         case 'DELETE': {
             try {
-                const user : any = await authUser(cookies, { _id: 1 }, 'accessToken', `${process.env.ACCESS_TOKEN_SECRET}`, query)
+                const user : any = await authUser(cookies, { _id: 1 }, parseAuthHeader(req), `${process.env.ACCESS_TOKEN_SECRET}`, query)
                 if (!user) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
                 const collection = await getCollection()
                 const result = await collection.deleteOne({ _id: new ObjectID(user._id) })
                 if (result.deletedCount !== 1) throw new Error()
                 res.setHeader('Set-Cookie', [
-                    serialize('name', '', {
-                        path: '/',
-                        domain: process.env.NODE_ENV === 'production' ? '.jobsfind.vercel.app' : 'localhost',
-                        sameSite: 'strict',
-                        maxAge: 0
-                    }),
                     serialize('_id', '', {
                         path: '/',
-                        domain: process.env.NODE_ENV === 'production' ? '.jobsfind.vercel.app' : 'localhost',
-                        sameSite: 'strict',
-                        maxAge: 0
-                    }),
-                    serialize('accessToken', '', {
-                        path: '/',
-                        domain: process.env.NODE_ENV === 'production' ? '.jobsfind.vercel.app' : 'localhost',
                         sameSite: 'strict',
                         maxAge: 0
                     }),
                     serialize('accountDeleted', 'yes', {
                         path: '/',
-                        domain: process.env.NODE_ENV === 'production' ? '.jobsfind.vercel.app' : 'localhost',
                         sameSite: 'strict',
                         maxAge: 5
                     }),
                     serialize('refreshToken', '', {
                         path: '/',
-                        domain: process.env.NODE_ENV === 'production' ? '.jobsfind.vercel.app' : 'localhost',
                         sameSite: 'strict',
                         maxAge: 0
                     })

@@ -11,8 +11,6 @@ type PassedBody = {email : string, password : string}
 
 const login = async (req : NextApiRequest, res : NextApiResponse) => {
     const { method, body } = req
-
-    res.setHeader('Content-Type', 'application/json');
     
     if (method === 'POST') {
         try {
@@ -25,12 +23,11 @@ const login = async (req : NextApiRequest, res : NextApiResponse) => {
             const user = await collection.findOne({ email })
             const match = await compare(password, user.password)
             if (!match) return res.status(403).json(InfoTypes.WRONG_CREDENTIALS)
-            const accessToken = sign({ user: user._id }, `${process.env.ACCESS_TOKEN_SECRET}`, { expiresIn: '10m' })
             const refreshToken = sign({ user: user._id }, `${process.env.REFRESH_TOKEN_SECRET}`)
             const result = await collection.updateOne({ email }, { $set: { refreshTokens: [...user.refreshTokens, refreshToken] } })
             if (result.modifiedCount !== 1) throw new Error()
-            generateCookies(res, user.name, user._id, accessToken, refreshToken)
-            res.status(200).end()
+            generateCookies(res, user._id, refreshToken)
+            res.status(200).end(user.name)
         }
         catch {
             res.status(500).json(InfoTypes.SERVER_CRASH)

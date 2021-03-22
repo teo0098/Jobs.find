@@ -2,6 +2,7 @@ import { Form } from "react-final-form"
 import createDecorator from 'final-form-focus'
 import { useRouter } from 'next/router'
 import cookies from 'js-cookie'
+import { connect } from 'react-redux'
 
 import useManageAccount from "../customHooks/useManageAccount"
 import { StyledForm, StyledInputsContainer } from "../Signin/styledSignin"
@@ -21,14 +22,15 @@ import { StyledDiv } from "../Signup/styledSignup"
 import Theme from "../../styles/theme"
 import useGetData from "../customHooks/useGetData"
 import { User } from "../../types/User"
+import mapUserDispatchToProps from "../../store/user/mapUserDispatchToProps"
 
 const focusOnErrorDecorator = createDecorator()
 const focusOnErrorDecorator2 = createDecorator()
 
-const Dashboard : React.FC = () => {
+const Dashboard : React.FC<{ changeName : (name: string) => void }> = ({ changeName }) => {
 
     const { handleEditPersonalData, handleEditPassword, state: { loading, error, errorMsg, success },
-            edited, capitalizeText, handleDeleteAccount } = useManageAccount()
+            edited, capitalizeText, handleDeleteAccount } = useManageAccount(changeName)
     const { dataLoading, userData } = useGetData(`/api/users/${cookies.get('_id')}/account`)
 
     const { back } = useRouter()
@@ -98,4 +100,4 @@ const Dashboard : React.FC = () => {
     )
 }
 
-export default Dashboard
+export default connect(null, mapUserDispatchToProps)(Dashboard)

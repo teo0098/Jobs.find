@@ -3,15 +3,17 @@ import { persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 
 import { favJobsReducer } from './favJobs/favJobsReducer'
+import { userReducer } from './user/userReducer'
 
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['favJobs']
+    whitelist: ['favJobs', 'user']
 }
 
 const rootReducer = combineReducers({
-    favJobs: favJobsReducer
+    favJobs: favJobsReducer,
+    user: userReducer
 })
 
 export default persistReducer(persistConfig, rootReducer)
