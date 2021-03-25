@@ -9,6 +9,8 @@ import updateUser from '../../utils/middlewares/updateUser'
 const logout = async (req : NextApiRequest, res : NextApiResponse) => {
     const { method, cookies } = req
 
+    res.setHeader('Content-Type', 'application/json');
+
     if (method === 'GET') {
         try {
             const user = await authUser(cookies, { refreshTokens: 1 }, cookies['refreshToken'], `${process.env.REFRESH_TOKEN_SECRET}`)
