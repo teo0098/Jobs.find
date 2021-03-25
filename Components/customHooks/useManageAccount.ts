@@ -16,12 +16,18 @@ const useManageAccount = (changeName : (name: string) => void) => {
         setEdited(0)
         dispatch({ type: RegisterActions.LOADING, errorMsg: '' })
         try {
-            const { data: tokenData, status: tokenStatus, headers: tokenHeaders } = await axios.get(`/api/users/${cookies.get('_id')}/token`)
-            if (tokenStatus === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: tokenData })
-            const { data: newData, status: newStatus } = await axios.put(`/api/users/${cookies.get('_id')}/account`, values, { headers: { Authorization: `${tokenHeaders['authorization']}` } })
-            if (newStatus === 500) throw new Error()
-            if (newStatus === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: newData })
-            if (newStatus === 409) return dispatch({ type: RegisterActions.ERROR, errorMsg: RegisterActions.EMAIL_IN_USE })
+            const { status } = await axios.put(`/api/users/${cookies.get('_id')}/account`, values, { headers: { Authorization: `Bearer ${sessionStorage.getItem('accessToken')}` } })
+            if (status === 500) throw new Error()
+            if (status === 403) {
+                const { data: tokenData, status: tokenStatus } = await axios.get(`/api/users/${cookies.get('_id')}/token`)
+                if (tokenStatus === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: tokenData })
+                sessionStorage.setItem('accessToken', tokenData)
+                const { data: newData, status: newStatus } = await axios.put(`/api/users/${cookies.get('_id')}/account`, values, { headers: { Authorization: `Bearer ${sessionStorage.getItem('accessToken')}` } })
+                if (newStatus === 500) throw new Error()
+                if (newStatus === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: newData })
+                if (newStatus === 409) return dispatch({ type: RegisterActions.ERROR, errorMsg: RegisterActions.EMAIL_IN_USE })   
+            }
+            if (status === 409) return dispatch({ type: RegisterActions.ERROR, errorMsg: RegisterActions.EMAIL_IN_USE })   
             dispatch({ type: RegisterActions.SUCCESS, errorMsg: '' })
             changeName(values.name as string)
         }
@@ -34,11 +40,16 @@ const useManageAccount = (changeName : (name: string) => void) => {
         setEdited(1)
         dispatch({ type: RegisterActions.LOADING, errorMsg: '' })
         try {
-            const { data: tokenData, status: tokenStatus, headers: tokenHeaders } = await axios.get(`/api/users/${cookies.get('_id')}/token`)
-            if (tokenStatus === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: tokenData })
-            const { data: newData, status: newStatus } = await axios.patch(`/api/users/${cookies.get('_id')}/account`, values, { headers: { Authorization: `${tokenHeaders['authorization']}` } })
-            if (newStatus === 500) throw new Error()
-            if (newStatus === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: newData })
+            const { status } = await axios.patch(`/api/users/${cookies.get('_id')}/account`, values, { headers: { Authorization: `Bearer ${sessionStorage.getItem('accessToken')}` } })
+            if (status === 500) throw new Error()
+            if (status === 403) {
+                const { data: tokenData, status: tokenStatus } = await axios.get(`/api/users/${cookies.get('_id')}/token`)
+                if (tokenStatus === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: tokenData })
+                sessionStorage.setItem('accessToken', tokenData)
+                const { data: newData, status: newStatus } = await axios.patch(`/api/users/${cookies.get('_id')}/account`, values, { headers: { Authorization: `Bearer ${sessionStorage.getItem('accessToken')}` } })
+                if (newStatus === 500) throw new Error()
+                if (newStatus === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: newData })
+            }
             dispatch({ type: RegisterActions.SUCCESS, errorMsg: '' })
         }
         catch {
@@ -50,11 +61,16 @@ const useManageAccount = (changeName : (name: string) => void) => {
         setEdited(2)
         dispatch({ type: RegisterActions.LOADING, errorMsg: '' })
         try {
-            const { data: tokenData, status: tokenStatus, headers: tokenHeaders } = await axios.get(`/api/users/${cookies.get('_id')}/token`)
-            if (tokenStatus === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: tokenData })
-            const { data: newData, status: newStatus } = await axios.delete(`/api/users/${cookies.get('_id')}/account`, { headers: { Authorization: `${tokenHeaders['authorization']}` } })
-            if (newStatus === 500) throw new Error()
-            if (newStatus === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: newData })
+            const { status } = await axios.delete(`/api/users/${cookies.get('_id')}/account`, { headers: { Authorization: `Bearer ${sessionStorage.getItem('accessToken')}` } })
+            if (status === 500) throw new Error()
+            if (status === 403) {
+                const { data: tokenData, status: tokenStatus } = await axios.get(`/api/users/${cookies.get('_id')}/token`)
+                if (tokenStatus === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: tokenData })
+                sessionStorage.setItem('accessToken', tokenData)
+                const { data: newData, status: newStatus } = await axios.delete(`/api/users/${cookies.get('_id')}/account`, { headers: { Authorization: `Bearer ${sessionStorage.getItem('accessToken')}` } })
+                if (newStatus === 500) throw new Error()
+                if (newStatus === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: newData })
+            }
             dispatch({ type: RegisterActions.SUCCESS, errorMsg: '' })
             push('/signin')
         }

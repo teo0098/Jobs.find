@@ -12,6 +12,8 @@ type PassedBody = {name : string, surname : string, email : string, password : s
 const registerUser = async (req : NextApiRequest, res : NextApiResponse) => {
     const { method, body } = req
 
+    res.setHeader('Content-Type', 'application/json');
+
     if (method === 'POST') {
         const { name, surname, email, password, rpassword } : PassedBody = body
         try {

@@ -14,11 +14,17 @@ const useGetData = (url : string) => {
         const getData = async () => {
             try {
                 if (!cookies.get('_id')) throw new Error()
-                const { status: tokenStatus, headers: tokenHeaders } = await axios.get(`/api/users/${cookies.get('_id')}/token`)
-                if (tokenStatus === 403) throw new Error()
-                const { data: newData, status: newStatus } = await axios.get(url, { headers: { Authorization: `${tokenHeaders['authorization']}` } })
-                if (newStatus === 500 || newStatus === 403) throw new Error()
-                setUserData(newData)
+                const { data, status } = await axios.get(url, { headers: { Authorization: `Bearer ${sessionStorage.getItem('accessToken')}` } })
+                if (status === 500) throw new Error()
+                if (status === 403) {
+                    const { data: tokenData, status: tokenStatus } = await axios.get(`/api/users/${cookies.get('_id')}/token`)
+                    if (tokenStatus === 403) throw new Error()
+                    sessionStorage.setItem('accessToken', tokenData)
+                    const { data: newData, status: newStatus } = await axios.get(url, { headers: { Authorization: `Bearer ${sessionStorage.getItem('accessToken')}` } })
+                    if (newStatus === 500 || newStatus === 403) throw new Error()
+                    return setUserData(newData)
+                }
+                setUserData(data)
             }
             catch {
                 setUserData(null)

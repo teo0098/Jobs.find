@@ -17,7 +17,8 @@ const useSignin = (changeName : (name: string) => void) => {
             if (status === 500) throw new Error()
             if (status === 403) return dispatch({ type: RegisterActions.ERROR, errorMsg: data })
             dispatch({ type: RegisterActions.SUCCESS, errorMsg: '' })
-            changeName(data as string)
+            changeName(data.name as string)
+            sessionStorage.setItem('accessToken', data.accessToken)
             push('/favourites/local')
         }
         catch {
