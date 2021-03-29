@@ -13,7 +13,6 @@ describe('Login user into a service', () => {
     it('Successfully logged into a service', () => {
         cy.loginUser(200, Cypress.env('LOGIN_EMAIL'), Cypress.env('LOGIN_PASSWORD'))
         cy.visit('/dashboard')
-        cy.getCookie('accessToken').should('exist')
         cy.getCookie('refreshToken').should('exist')
     })
 })
