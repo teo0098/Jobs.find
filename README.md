@@ -16,4 +16,4 @@
   <li>MongoDB</li>
 </ul>
 <hr>
-<a href="https://jobs-find.vercel.app/">Project's preview</a>
+<a href="https://jobsfind.vercel.app/">Project's preview</a>
